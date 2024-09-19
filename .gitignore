@@ -1,0 +1,47 @@
+# Maven target directory
+/Administrador-de-tareas-Backend/target
+
+# Maven wrapper files
+.mvn/
+
+# Eclipse project files
+.project
+.classpath
+.settings/
+
+# IntelliJ IDEA project files
+.idea/
+*.iml
+
+# NetBeans project files
+nbproject/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Build files
+*.jar
+*.war
+*.ear
+
+# IDE-specific files
+*.swp
+*.swo
+
+# Package distribution files
+*.tar.gz
+*.zip
+
+# Java class files
+*.class
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+
+
