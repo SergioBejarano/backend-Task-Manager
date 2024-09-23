@@ -4,7 +4,7 @@ package com.example;
  * Hello world!
  *
  */
-public class App 
+public class TaskManager 
 {
     public static void main( String[] args )
     {
