@@ -1,47 +1,33 @@
-# Maven target directory
-/Administrador-de-tareas-Backend/target
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-# Maven wrapper files
-.mvn/
-
-# Eclipse project files
-.project
+### STS ###
+.apt_generated
 .classpath
-.settings/
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
-# IntelliJ IDEA project files
-.idea/
+### IntelliJ IDEA ###
+.idea
+*.iws
 *.iml
+*.ipr
 
-# NetBeans project files
-nbproject/
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# OS-specific files
-.DS_Store
-Thumbs.db
-
-# Log files
-*.log
-
-# Build files
-*.jar
-*.war
-*.ear
-
-# IDE-specific files
-*.swp
-*.swo
-
-# Package distribution files
-*.tar.gz
-*.zip
-
-# Java class files
-*.class
-
-# Temporary files
-*.tmp
-*.bak
-*.swp
-
-
+### VS Code ###
+.vscode/
