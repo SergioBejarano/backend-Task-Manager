@@ -14,6 +14,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/tasks")
+@CrossOrigin(origins = "http://localhost:63342")
 public class TaskController {
 
     @Autowired
@@ -26,8 +27,7 @@ public class TaskController {
      */
     @GetMapping
     public List<Task> getAllTasks() {
-        // Implementation not provided
-        return null;
+        return taskService.findAll();
     }
 
     /**
@@ -38,8 +38,7 @@ public class TaskController {
      */
     @PostMapping
     public Task createTask(@RequestBody Task task) {
-        // Implementation not provided
-        return null;
+        return taskService.save(task);
     }
 
     /**
@@ -50,8 +49,8 @@ public class TaskController {
      */
     @PutMapping("/{id}/complete")
     public ResponseEntity<Task> completeTask(@PathVariable String id) {
-        // Implementation not provided
-        return null;
+        Task updatedTask = taskService.markAsCompleted(id);
+        return ResponseEntity.ok(updatedTask);
     }
 
     /**
@@ -62,7 +61,7 @@ public class TaskController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable String id) {
-        // Implementation not provided
-        return null;
+        taskService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
