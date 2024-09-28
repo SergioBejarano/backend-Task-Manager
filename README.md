@@ -1,3 +1,12 @@
+## Pruebas de unidad y cobertura en Jacoco
+
+Se crean 14 pruebas de unidad sin el contexto de Spring .
+Se modifica el pom para incluir el reporte de cobertura de Jacoco.
+
+Después de implementar el código se obtiene el siguiente reporte:
+
+
+
 ## Conexión a Base de Datos en MongoDB Atlas
 
 **Configuración**
@@ -26,7 +35,7 @@ Se define el siguiente puerto:
 server.port=8081
 ```
 
-## Implementación
+### Implementación
 
 
 La implementación consta de tres componentes principales:
@@ -38,7 +47,7 @@ La implementación consta de tres componentes principales:
 **Repositorio**: La interfaz TaskRepository extiende MongoRepository, proporcionando métodos para el acceso a datos en MongoDB. Permite que la capa de servicio realice operaciones en la base de datos sin implementar la lógica subyacente.
 
 
-## Pruebas con PostMan
+### Pruebas con PostMan
 
 Primero, se ejecuta la aplicación con:
 
