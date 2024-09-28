@@ -23,8 +23,7 @@ public class TaskService {
      * @return A list of all tasks.
      */
     public List<Task> findAll() {
-        // Implementation not provided
-        return null;
+        return taskRepository.findAll();
     }
 
     /**
@@ -34,8 +33,7 @@ public class TaskService {
      * @return The saved Task object.
      */
     public Task save(Task task) {
-        // Implementation not provided
-        return null;
+        return taskRepository.save(task);
     }
 
     /**
@@ -44,7 +42,7 @@ public class TaskService {
      * @param id The ID of the task to be deleted.
      */
     public void deleteById(String id) {
-        // Implementation not provided
+        taskRepository.deleteById(id);
     }
 
     /**
@@ -54,7 +52,8 @@ public class TaskService {
      * @return The updated Task object.
      */
     public Task markAsCompleted(String id) {
-        // Implementation not provided
-        return null;
+        Task task = taskRepository.findById(id).orElseThrow();
+        task.setCompleted(true);
+        return taskRepository.save(task);
     }
 }
