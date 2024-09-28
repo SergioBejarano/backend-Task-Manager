@@ -49,6 +49,18 @@ La implementación consta de tres componentes principales:
 **Repositorio**: La interfaz TaskRepository extiende MongoRepository, proporcionando métodos para el acceso a datos en MongoDB. Permite que la capa de servicio realice operaciones en la base de datos sin implementar la lógica subyacente.
 
 
+### Metodología TDD
+
+**Añadir Tareas**
+Se realizaron las pruebas necesarias para el método `addTask`
+
+![image](https://github.com/user-attachments/assets/e5b8ae30-7666-406a-b2d0-666b3095664e)
+
+Posteriormente se realizó su implementación para que las pruebas pasaran.
+
+![image](https://github.com/user-attachments/assets/4163de7b-fe14-4d8a-8460-f02e5434cc03)
+
+
 ### Pruebas con PostMan
 
 Primero, se ejecuta la aplicación con:
