@@ -5,6 +5,8 @@ Se modifica el pom para incluir el reporte de cobertura de Jacoco.
 
 Después de implementar el código se obtiene el siguiente reporte:
 
+![image](https://github.com/user-attachments/assets/b52f5638-5c06-4e04-ac1a-8c586c719b59)
+
 
 
 ## Conexión a Base de Datos en MongoDB Atlas
