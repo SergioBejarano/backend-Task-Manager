@@ -19,10 +19,7 @@ public class Task {
     /**
      * Default constructor for Task.
      */
-    public Task() {
-       this.description = null;
-       this.completed = false;
-    }
+    public Task() {}
 
     /**
      * Constructor for Task with a description.
