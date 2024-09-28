@@ -1,6 +1,7 @@
 package edu.eci.cvds.taskManager.model;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The TaskManager class manages a collection of tasks using a HashMap.
@@ -25,6 +26,10 @@ public class TaskManager {
      * @throws IllegalArgumentException if the ID is null.
      */
     public void addTask(Task task) {
+        if (task == null || task.getId() == null) {
+            throw new IllegalArgumentException("Task or task ID cannot be null");
+        }
+        tasks.put(task.getId(), task);
     }
 
     /**
@@ -59,12 +64,12 @@ public class TaskManager {
         }
     }
 
-    /**
-     * Retrieves all tasks managed by the TaskManager.
+    /**Map
+     * RetrMapll tasks managed by the TaskManager.
      *
      * @return A Map containing all tasks, where the key is the task ID and the value is the Task object.
      */
-    public HashMap<String, Task> getAllTasks() {
+    public Map<String, Task> getAllTasks() {
         return tasks;
     }
 }

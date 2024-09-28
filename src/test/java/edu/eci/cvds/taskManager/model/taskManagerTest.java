@@ -67,7 +67,7 @@ class TaskManagerTest {
      * Verify not to allow adding a null Task.
      */
     @Test
-    void addTask_ShouldThrowExceptionForNullTask() {
+    public void addTask_ShouldThrowExceptionForNullTask() {
         assertThrows(IllegalArgumentException.class, () -> taskManager.addTask(null),
                 "Adding null task should throw IllegalArgumentException");
     }
@@ -76,7 +76,7 @@ class TaskManagerTest {
      * Verify not allow add a Task with null ID.
      */
     @Test
-    void addTask_ShouldThrowExceptionForTaskWithNullId() {
+    public void addTask_ShouldThrowExceptionForTaskWithNullId() {
         Task taskWithNullId = new Task(null, "Test task", false);
         assertThrows(IllegalArgumentException.class, () -> taskManager.addTask(taskWithNullId),
                 "Adding task with null ID should throw IllegalArgumentException");
