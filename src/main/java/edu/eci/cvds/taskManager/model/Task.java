@@ -19,8 +19,10 @@ public class Task {
     /**
      * Default constructor for Task.
      */
-    public Task() {
-        // Implementation not provided
+    public Task(String id, String description, boolean completed) {
+        this.id = id;
+        this.description = description;
+        this.completed = completed;
     }
 
     /**

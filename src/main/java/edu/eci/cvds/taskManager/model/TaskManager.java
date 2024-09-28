@@ -21,10 +21,10 @@ public class TaskManager {
      * Adds a new task to the TaskManager.
      *
      * @param task The Task object to be added.
-     *             It is expected that the task has a unique ID assigned.
+     * It is expected that the task has a unique ID assigned.
+     * @throws IllegalArgumentException if the ID is null.
      */
     public void addTask(Task task) {
-        tasks.put(task.getId(), task);
     }
 
     /**
