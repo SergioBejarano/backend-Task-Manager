@@ -8,7 +8,7 @@ class TaskManagerTest {
 
     private TaskManager taskManager;
 
-    /* 
+    /*
      * Set up TaskManager instance before each test.
      */
     @BeforeEach
@@ -16,7 +16,7 @@ class TaskManagerTest {
         taskManager = new TaskManager();
     }
 
-    /* 
+    /*
      * Verify adding a task successfully to the TaskManager.
      */
     @Test
@@ -30,8 +30,8 @@ class TaskManagerTest {
         assertEquals(task, retrievedTask, "Retrieved task should be the same as the added task");
     }
 
-    /* 
-     * Verify adding a task with the same ID 
+    /*
+     * Verify adding a task with the same ID
      * will overwrite the existing task.
      */
     @Test
@@ -49,7 +49,7 @@ class TaskManagerTest {
         assertTrue(retrievedTask.isCompleted(), "Task should be marked as completed (from second task)");
     }
 
-    /* 
+    /*
      * Verify adding a new task increments de task count.
      */
     @Test
@@ -63,7 +63,7 @@ class TaskManagerTest {
         assertEquals(2, taskManager.getAllTasks().size(), "Task count should be 2 after adding two tasks");
     }
 
-    /* 
+    /*
      * Verify not to allow adding a null Task.
      */
     @Test
@@ -72,7 +72,7 @@ class TaskManagerTest {
                 "Adding null task should throw IllegalArgumentException");
     }
 
-    /* 
+    /*
      * Verify not allow add a Task with null ID.
      */
     @Test
