@@ -1,6 +1,7 @@
 package edu.eci.cvds.taskManager.model;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The TaskManager class manages a collection of tasks using a HashMap.
@@ -8,24 +9,27 @@ import java.util.HashMap;
  */
 public class TaskManager {
 
-    // Map to store tasks, where the key is the task ID
     private HashMap<String, Task> tasks;
 
     /**
      * Constructor initializes the TaskManager with an empty HashMap.
      */
     public TaskManager() {
-        // Implementation not provided
+        tasks = new HashMap<>();
     }
 
     /**
      * Adds a new task to the TaskManager.
      *
      * @param task The Task object to be added.
-     *             It is expected that the task has a unique ID assigned.
+     * It is expected that the task has a unique ID assigned.
+     * @throws IllegalArgumentException if the ID is null.
      */
     public void addTask(Task task) {
-        // Implementation not provided
+        if (task == null || task.getId() == null) {
+            throw new IllegalArgumentException("Task or task ID cannot be null");
+        }
+        tasks.put(task.getId(), task);
     }
 
     /**
@@ -35,8 +39,7 @@ public class TaskManager {
      * @return The Task object associated with the provided ID, or null if not found.
      */
     public Task getTask(String id) {
-        // Implementation not provided
-        return null;
+        return tasks.get(id);
     }
 
     /**
@@ -45,7 +48,7 @@ public class TaskManager {
      * @param id The ID of the task to be deleted.
      */
     public void deleteTask(String id) {
-        // Implementation not provided
+        tasks.remove(id);
     }
 
     /**
@@ -55,16 +58,18 @@ public class TaskManager {
      *           If the task is not found, no action is taken.
      */
     public void markAsCompleted(String id) {
-        // Implementation not provided
+        Task task = tasks.get(id);
+        if (task != null) {
+            task.setCompleted(true);
+        }
     }
 
-    /**
-     * Retrieves all tasks managed by the TaskManager.
+    /**Map
+     * RetrMapll tasks managed by the TaskManager.
      *
      * @return A Map containing all tasks, where the key is the task ID and the value is the Task object.
      */
-    public HashMap<String, Task> getAllTasks() {
-        // Implementation not provided
-        return null;
+    public Map<String, Task> getAllTasks() {
+        return tasks;
     }
 }
