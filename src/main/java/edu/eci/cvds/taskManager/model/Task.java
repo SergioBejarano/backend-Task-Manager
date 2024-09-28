@@ -1,13 +1,12 @@
 package edu.eci.cvds.taskManager.model;
 
-import org.springframework.data.annotation.Id; // Para MongoDB
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document; // Para MongoDB
 import javax.persistence.Entity; // Para JPA
 import javax.persistence.GeneratedValue; // Para JPA
 import javax.persistence.GenerationType; // Para JPA
 import javax.persistence.Table; // Para JPA
 import javax.persistence.Column; // Para JPA
-import javax.persistence.Id; // Para JPA
 
 /**
  * The Task class represents a task in the task management application.
@@ -20,7 +19,6 @@ import javax.persistence.Id; // Para JPA
 public class Task {
 
     @Id // Anotación para JPA
-    @org.springframework.data.annotation.Id // Anotación para MongoDB
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Para PostgreSQL (JPA)
     private String id;
 
