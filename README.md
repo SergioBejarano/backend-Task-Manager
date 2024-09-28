@@ -1,3 +1,14 @@
+## Pruebas de unidad y cobertura en Jacoco
+
+Se crean 14 pruebas de unidad sin el contexto de Spring .
+Se modifica el pom para incluir el reporte de cobertura de Jacoco.
+
+Después de implementar el código se obtiene el siguiente reporte:
+
+![image](https://github.com/user-attachments/assets/b52f5638-5c06-4e04-ac1a-8c586c719b59)
+
+
+
 ## Conexión a Base de Datos en MongoDB Atlas
 
 **Configuración**
@@ -26,7 +37,7 @@ Se define el siguiente puerto:
 server.port=8081
 ```
 
-## Implementación
+### Implementación
 
 
 La implementación consta de tres componentes principales:
@@ -50,11 +61,7 @@ Posteriormente se realizó su implementación para que las pruebas pasaran.
 ![image](https://github.com/user-attachments/assets/4163de7b-fe14-4d8a-8460-f02e5434cc03)
 
 
-
-
-
-
-## Pruebas con PostMan
+### Pruebas con PostMan
 
 Primero, se ejecuta la aplicación con:
 
