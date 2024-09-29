@@ -1,3 +1,44 @@
+### Implementación
+
+
+La implementación consta de tres componentes principales:
+
+**Controlador**: La clase TaskController maneja las solicitudes HTTP para las tareas, mapeándolas a métodos para recuperar, crear, actualizar y eliminar tareas. Utiliza anotaciones como @GetMapping y @PostMapping para gestionar las interacciones con el cliente.
+
+**Servicio**: La clase TaskService contiene la lógica de negocio para la gestión de tareas. Interactúa con el TaskRepository para realizar operaciones CRUD y encapsula la lógica de manejo de tareas, lo que facilita las pruebas y el mantenimiento.
+
+**Repositorio**: La interfaz TaskRepository extiende MongoRepository, proporcionando métodos para el acceso a datos en MongoDB. Permite que la capa de servicio realice operaciones en la base de datos sin implementar la lógica subyacente.
+
+### Metodología TDD
+
+**Añadir Tareas**\
+Se realizaron las pruebas necesarias para el método `addTask`
+
+![image](https://github.com/user-attachments/assets/e5b8ae30-7666-406a-b2d0-666b3095664e)
+
+Posteriormente se realizó su implementación para que las pruebas pasaran.
+
+![image](https://github.com/user-attachments/assets/4163de7b-fe14-4d8a-8460-f02e5434cc03)
+
+**Marcar Tareas como completadas**\
+Se realizaron las pruebas necesarias para el método `markAsCompleted`
+
+![image](https://github.com/user-attachments/assets/9760c60e-91d5-41a1-8a96-36f7c7278e5b)
+
+Posteriormente se realizó su implementación para que las pruebas pasaran.
+
+![image](https://github.com/user-attachments/assets/8aac1f5b-4e9e-42da-94c1-160a14deea5f)
+
+**Eliminar Tareas**\
+Se realizaron las pruebas necesarias para el método `deleteTask`
+
+![image](https://github.com/user-attachments/assets/cfddcd37-ea01-4f23-a29e-ccc110a5a9aa)
+
+Posteriormente se realizó su implementación para que las pruebas pasaran.
+
+![image](https://github.com/user-attachments/assets/8aac1f5b-4e9e-42da-94c1-160a14deea5f)
+
+
 ## Pruebas de unidad y cobertura en Jacoco
 
 Se crean 14 pruebas de unidad sin el contexto de Spring .
@@ -51,29 +92,6 @@ Y finalmente en psql o pgAdmin de postgreSQL, creamos la base de datos y las tab
 
 ![image](https://github.com/user-attachments/assets/18fdcf33-7e4d-4c25-bc77-b0fad06f61c9)
 ![image](https://github.com/user-attachments/assets/add2fe04-b9ef-4f4a-9dc2-db0524b8274f)
-
-### Implementación
-
-
-La implementación consta de tres componentes principales:
-
-**Controlador**: La clase TaskController maneja las solicitudes HTTP para las tareas, mapeándolas a métodos para recuperar, crear, actualizar y eliminar tareas. Utiliza anotaciones como @GetMapping y @PostMapping para gestionar las interacciones con el cliente.
-
-**Servicio**: La clase TaskService contiene la lógica de negocio para la gestión de tareas. Interactúa con el TaskRepository para realizar operaciones CRUD y encapsula la lógica de manejo de tareas, lo que facilita las pruebas y el mantenimiento.
-
-**Repositorio**: La interfaz TaskRepository extiende MongoRepository, proporcionando métodos para el acceso a datos en MongoDB. Permite que la capa de servicio realice operaciones en la base de datos sin implementar la lógica subyacente.
-
-
-### Metodología TDD
-
-**Añadir Tareas**
-Se realizaron las pruebas necesarias para el método `addTask`
-
-![image](https://github.com/user-attachments/assets/e5b8ae30-7666-406a-b2d0-666b3095664e)
-
-Posteriormente se realizó su implementación para que las pruebas pasaran.
-
-![image](https://github.com/user-attachments/assets/4163de7b-fe14-4d8a-8460-f02e5434cc03)
 
 
 ### Pruebas con PostMan
