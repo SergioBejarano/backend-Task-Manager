@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
  * The TaskPostgresRepository interface provides the data access layer for Task entities in PostgreSQL.
  * It extends the JpaRepository interface, which provides basic CRUD operations for relational databases.
  */
+@Repository
 public interface TaskPostgresRepository extends JpaRepository<TaskPostgres, String> {
     // No additional methods are defined; the default CRUD operations are inherited from JpaRepository.
 }

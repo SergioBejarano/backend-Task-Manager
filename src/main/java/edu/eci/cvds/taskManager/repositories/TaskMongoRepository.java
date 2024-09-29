@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
  * The TaskMongoRepository interface provides the data access layer for Task entities.
  * It extends the MongoRepository interface, which provides basic CRUD operations.
  */
+@Repository
 public interface TaskMongoRepository extends MongoRepository<TaskMongo, String> {
     // No additional methods are defined; the default CRUD operations are inherited from MongoRepository.
 }

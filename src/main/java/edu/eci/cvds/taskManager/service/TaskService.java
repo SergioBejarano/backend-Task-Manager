@@ -6,10 +6,17 @@ import edu.eci.cvds.taskManager.model.TaskPostgres;
 import edu.eci.cvds.taskManager.repositories.TaskMongoRepository;
 import edu.eci.cvds.taskManager.repositories.TaskPostgresRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * The TaskService class provides business logic for managing tasks.
@@ -42,7 +49,7 @@ public class TaskService {
      */
     public Task save(Task task) {
         TaskMongo taskMongo = new TaskMongo(task);
-        TaskPostgres taskPostgres  = new TaskPostgres(task);
+        TaskPostgres taskPostgres = new TaskPostgres(task);
         taskPostgresRepository.saveAndFlush(taskPostgres);
         return taskMongoRepository.save(taskMongo);
     }
@@ -68,9 +75,9 @@ public class TaskService {
     public Task markAsCompleted(String id) {
         TaskMongo taskMongo = taskMongoRepository.findById(id).orElseThrow();
         taskMongo.setCompleted(true);
-        //TaskPostgres taskPostgres = taskPostgresRepository.getReferenceById(id);
-        //taskPostgres.setCompleted(true);
-        //taskPostgresRepository.saveAndFlush(taskPostgres);
+        TaskPostgres taskPostgres = taskPostgresRepository.getById(id);
+        taskPostgres.setCompleted(true);
+        taskPostgresRepository.saveAndFlush(taskPostgres);
         return taskMongoRepository.save(taskMongo);
     }
 }

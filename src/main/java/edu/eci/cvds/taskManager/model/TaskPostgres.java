@@ -14,6 +14,12 @@ public class TaskPostgres extends Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "completed")
+    private boolean completed;
+
     /**
      * Default constructor for TaskPostgres.
      */
@@ -28,6 +34,9 @@ public class TaskPostgres extends Task {
      */
     public TaskPostgres(Task task) {
         super(task.getId(), task.getDescription(), task.isCompleted());
+        this.id = task.getId();
+        this.description = task.getDescription();
+        this.completed = task.isCompleted();
     }
 
     /**
