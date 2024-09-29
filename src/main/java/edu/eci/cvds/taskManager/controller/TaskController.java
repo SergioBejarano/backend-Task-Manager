@@ -1,6 +1,7 @@
 package edu.eci.cvds.taskManager.controller;
 
 import edu.eci.cvds.taskManager.model.Task;
+import edu.eci.cvds.taskManager.model.TaskMongo;
 import edu.eci.cvds.taskManager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class TaskController {
      * @return A list of all tasks.
      */
     @GetMapping
-    public List<Task> getAllTasks() {
+    public List<TaskMongo> getAllTasks() {
         return taskService.findAll();
     }
 

@@ -8,10 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * It includes information about the task's ID, description, and completion
  * status.
  */
-@Document(collection = "tasks")
 public class Task {
 
-    @Id
     private String id;
     private String description;
     private boolean completed;
@@ -22,6 +20,14 @@ public class Task {
 
     public Task() {}
 
+
+    /**
+     * Constructor for Task.
+     *
+     * @param id The ID of task
+     * @param description The description of task.
+     * @param completed A boolean value of task.
+     */
     public Task(String id, String description, boolean completed) {
         this.id = id;
         this.description = description;

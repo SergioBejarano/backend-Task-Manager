@@ -3,36 +3,40 @@ package edu.eci.cvds.taskManager.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
+/**
+ * TaskMongo class specifically for MongoDB persistence.
+ * This class maps to the "tasks" collection in MongoDB.
+ */
 @Document(collection = "tasks")
-public class TaskMongo {
+public class TaskMongo extends Task {
 
     @Id
     private String id;
-    private String description;
-    private boolean completed;
 
     /**
-     * Default constructor for Task.
+     * Default constructor for TaskMongo.
      */
-
-    public TaskMongo() {}
-
-    public TaskMongo(Task task) {
-        this.id = task.getId();
-        this.description = task.getDescription();
-        this.completed = task.isCompleted();
+    public TaskMongo() {
+        super();
     }
 
+    /**
+     * Constructor that creates a TaskMongo from a Task object.
+     *
+     * @param task A task object to copy data from.
+     */
+    public TaskMongo(Task task) {
+        super(task.getId(), task.getDescription(), task.isCompleted());
+        this.id = task.getId();
+    }
 
     /**
-     * Constructor for Task with a description.
+     * Constructor for TaskMongo with a description.
      *
      * @param description The description of the task.
      */
     public TaskMongo(String description) {
-        this.description = description;
-        this.completed = false;
+        super(description);
     }
 
     /**
@@ -40,6 +44,7 @@ public class TaskMongo {
      *
      * @return The ID of the task.
      */
+    @Override
     public String getId() {
         return id;
     }
@@ -53,40 +58,4 @@ public class TaskMongo {
         this.id = id;
     }
 
-    /**
-     * Gets the description of the task.
-     *
-     * @return The description of the task.
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Sets the description of the task.
-     *
-     * @param description The description to set for the task.
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
-     * Checks if the task is completed.
-     *
-     * @return true if the task is completed, false otherwise.
-     */
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    /**
-     * Sets the completion status of the task.
-     *
-     * @param completed The completion status to set.
-     */
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
-    
 }
