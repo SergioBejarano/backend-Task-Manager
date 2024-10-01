@@ -3,6 +3,8 @@ package edu.eci.cvds.taskManager.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.UUID;
+
 /**
  * The Task class represents a task in the task management application.
  * It includes information about the task's ID, description, and completion
@@ -18,7 +20,7 @@ public class Task {
      * Default constructor for Task.
      */
 
-    public Task() {}
+    public Task() {this.id = UUID.randomUUID().toString();}
 
 
     /**

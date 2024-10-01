@@ -1,6 +1,7 @@
 package edu.eci.cvds.taskManager.model;
 
-import javax.persistence.*;
+
+import jakarta.persistence.*;
 
 /**
  * TaskPostgres class specifically for PostgreSQL persistence.
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Table(name = "tasks")
 public class TaskPostgres extends Task {
 
-    @javax.persistence.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 

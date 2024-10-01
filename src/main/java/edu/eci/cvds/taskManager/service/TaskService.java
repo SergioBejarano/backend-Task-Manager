@@ -3,20 +3,15 @@ package edu.eci.cvds.taskManager.service;
 import edu.eci.cvds.taskManager.model.Task;
 import edu.eci.cvds.taskManager.model.TaskMongo;
 import edu.eci.cvds.taskManager.model.TaskPostgres;
-import edu.eci.cvds.taskManager.repositories.TaskMongoRepository;
-import edu.eci.cvds.taskManager.repositories.TaskPostgresRepository;
+import edu.eci.cvds.taskManager.repositories.mongo.TaskMongoRepository;
+import edu.eci.cvds.taskManager.repositories.postgres.TaskPostgresRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery;
+
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
+
 
 /**
  * The TaskService class provides business logic for managing tasks.
@@ -25,11 +20,15 @@ import java.util.function.Function;
 @Service
 public class TaskService {
 
-    @Autowired
-    private TaskMongoRepository taskMongoRepository;
+    private final TaskMongoRepository taskMongoRepository;
+
+    private final TaskPostgresRepository taskPostgresRepository;
 
     @Autowired
-    private TaskPostgresRepository taskPostgresRepository;
+    public TaskService(TaskMongoRepository taskMongoRepository, TaskPostgresRepository taskPostgresRepository) {
+        this.taskMongoRepository = taskMongoRepository;
+        this.taskPostgresRepository = taskPostgresRepository;
+    }
 
     /**
      * Retrieves all tasks from both MongoDB and Postgres repositories.
@@ -47,10 +46,14 @@ public class TaskService {
      * @param task The Task object to be saved.
      * @return The saved Task object.
      */
-    public Task save(Task task) {
+    public Task save(Task task)  {
         TaskMongo taskMongo = new TaskMongo(task);
         TaskPostgres taskPostgres = new TaskPostgres(task);
-        taskPostgresRepository.saveAndFlush(taskPostgres);
+        try {
+            taskPostgresRepository.save(taskPostgres);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return taskMongoRepository.save(taskMongo);
     }
 
@@ -59,10 +62,12 @@ public class TaskService {
      *
      * @param id The ID of the task to be deleted.
      */
-    public void deleteById(String id) {
-        List<String> ids = new ArrayList<>();
-        ids.add(id);
-        taskPostgresRepository.deleteAllByIdInBatch(ids);
+    public void deleteById(String id)  {
+        try {
+            taskPostgresRepository.deleteById(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         taskMongoRepository.deleteById(id);
     }
 
@@ -75,9 +80,11 @@ public class TaskService {
     public Task markAsCompleted(String id) {
         TaskMongo taskMongo = taskMongoRepository.findById(id).orElseThrow();
         taskMongo.setCompleted(true);
-        TaskPostgres taskPostgres = taskPostgresRepository.getById(id);
-        taskPostgres.setCompleted(true);
-        taskPostgresRepository.saveAndFlush(taskPostgres);
+        try {
+            taskPostgresRepository.markAsCompleted(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return taskMongoRepository.save(taskMongo);
     }
 }

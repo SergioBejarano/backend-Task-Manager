@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public class TaskController {
      * @return The created Task object.
      */
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
+    public Task createTask(@RequestBody Task task)  {
         return taskService.save(task);
     }
 
@@ -60,7 +61,7 @@ public class TaskController {
      * @return ResponseEntity indicating the outcome of the operation.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable String id) {
+    public ResponseEntity<Void> deleteTask(@PathVariable String id)  {
         taskService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

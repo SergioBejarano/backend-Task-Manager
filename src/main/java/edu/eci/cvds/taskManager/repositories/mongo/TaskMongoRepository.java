@@ -1,4 +1,4 @@
-package edu.eci.cvds.taskManager.repositories;
+package edu.eci.cvds.taskManager.repositories.mongo;
 
 import edu.eci.cvds.taskManager.model.TaskMongo;
 import org.springframework.data.mongodb.repository.MongoRepository;
