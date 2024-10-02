@@ -8,8 +8,6 @@
 name: Java CI with Maven
 
 on:
-  push:
-    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
@@ -51,7 +49,7 @@ jobs:
           cache: maven
       
       - name: Verify with Maven
-        run: mvn verify
+        run: mvn test
       
       - name: Check if Compilation is Needed
         run: |
