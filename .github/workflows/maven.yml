@@ -47,6 +47,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+
+      - name: Use TASKS_API_URL Variable
+        run: echo "API URL: ${{ vars.TASKS_API_URL }}"
       
       - name: Verify with Maven
         run: mvn test
