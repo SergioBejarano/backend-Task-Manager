@@ -10,8 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,88 +26,78 @@ public class TaskServiceTest {
     @InjectMocks
     private TaskService taskService;
 
+    private Task task;
+    private TaskMongo taskMongo;
+    private TaskPostgres taskPostgres;
+
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        task = new Task("Test Task");
+        taskMongo = new TaskMongo(task);
+        taskPostgres = new TaskPostgres(task);
     }
 
     @Test
-    void shouldGetTaskByIdSuccessfully() {
-        Task task = new Task("Sample task");
-        task.setId("123");
-        TaskMongo taskMongo = new TaskMongo(task);
-        TaskPostgres taskPostgres = new TaskPostgres(task);
+    public void testSaveTaskSuccessWithOneTaskRegistered() {
+        when(taskMongoRepository.save(any(TaskMongo.class))).thenReturn(taskMongo);
 
-        List<TaskMongo> mongoTasks = new ArrayList<>();
-        mongoTasks.add(taskMongo);
+        Task result = taskService.save(task);
 
-        List<TaskPostgres> postgresTasks = new ArrayList<>();
-        postgresTasks.add(taskPostgres);
-
-        when(taskMongoRepository.findAll()).thenReturn(mongoTasks);
-
-        Task retrievedTask = taskService.findAll().get(0);
-
-        assertNotNull(retrievedTask);
-        assertEquals("123", retrievedTask.getId());
+        assertNotNull(result);
+        assertEquals(task.getId(), result.getId());
     }
 
     @Test
-    void shouldNotGetTaskWhenNoTaskIsRegistered() {
-        when(taskMongoRepository.findAll()).thenReturn(new ArrayList<>());
+    public void testFindTaskByIdNoTask() {
+        when(taskMongoRepository.findById(task.getId())).thenReturn(Optional.empty());
 
-        List<TaskMongo> tasks = taskService.findAll();
+        assertThrows(RuntimeException.class, () -> {
+            taskService.markAsCompleted(task.getId());
+        });
 
-        assertTrue(tasks.isEmpty());
+        verify(taskMongoRepository, times(1)).findById(task.getId());
     }
 
     @Test
-    void shouldCreateTaskSuccessfullyWhenNoTaskIsRegistered() {
-        Task newTask = new Task("New task");
-        newTask.setId("123");
-        TaskMongo taskMongo = new TaskMongo(newTask);
-        TaskPostgres taskPostgres = new TaskPostgres(newTask);
+    public void testSaveTaskSuccess() throws Exception {
+        when(taskMongoRepository.save(any(TaskMongo.class))).thenReturn(taskMongo);
 
-        when(taskMongoRepository.save(taskMongo)).thenReturn(taskMongo);
+        doNothing().when(taskPostgresRepository).save(any(TaskPostgres.class));
 
-        Task createdTask = taskService.save(newTask);
+        Task result = taskService.save(task);
 
-        //assertNotNull(createdTask);
-        //assertEquals("123", createdTask.getId());
-        //assertEquals("New task", createdTask.getDescription());
-
-        // Verificamos que se llamaron los métodos save
-        //verify(taskMongoRepository).save(taskMongo);
-    }
-
-
-    @Test
-    void shouldDeleteTaskSuccessfullyWhenTaskIsRegistered() {
-        Task task = new Task("Task to delete");
-        task.setId("5");
-        TaskMongo taskMongo = new TaskMongo(task);
-        TaskPostgres taskPostgres = new TaskPostgres(task);
-        doNothing().when(taskMongoRepository).deleteById("5");
-
-        taskService.deleteById("5");
-
-        verify(taskMongoRepository, times(1)).deleteById("5");
+        assertNotNull(result);
+        assertEquals(task.getId(), result.getId());
+        verify(taskMongoRepository, times(1)).save(any(TaskMongo.class));
+        verify(taskPostgresRepository, times(1)).save(any(TaskPostgres.class));
     }
 
     @Test
-    void shouldNotReturnTaskAfterDeletion() {
-        Task task = new Task("Task to delete");
-        task.setId("8");
-        TaskMongo taskMongo = new TaskMongo(task);
-        TaskPostgres taskPostgres = new TaskPostgres(task);
-        doNothing().when(taskMongoRepository).deleteById("8");
+    public void testDeleteTaskSuccess() throws Exception {
+        doNothing().when(taskMongoRepository).deleteById(task.getId());
+        doNothing().when(taskPostgresRepository).deleteById(task.getId());
 
-        taskService.deleteById("8");
+        taskService.deleteById(task.getId());
 
-        when(taskMongoRepository.findAll()).thenReturn(new ArrayList<>());
+        verify(taskMongoRepository, times(1)).deleteById(task.getId());
+        verify(taskPostgresRepository, times(1)).deleteById(task.getId());
+    }
 
-        List<TaskMongo> tasks = taskService.findAll();
+    @Test
+    public void testDeleteAndFindTaskNoTask() throws Exception {
+        doNothing().when(taskMongoRepository).deleteById(task.getId());
+        doNothing().when(taskPostgresRepository).deleteById(task.getId());
+        when(taskMongoRepository.findById(task.getId())).thenReturn(Optional.empty());
 
-        assertTrue(tasks.stream().noneMatch(t -> t.getId().equals("8")));
+        taskService.deleteById(task.getId());
+
+        assertThrows(RuntimeException.class, () -> {
+            taskService.markAsCompleted(task.getId());
+        });
+
+        verify(taskMongoRepository, times(1)).deleteById(task.getId());
+        verify(taskPostgresRepository, times(1)).deleteById(task.getId());
+        verify(taskMongoRepository, times(1)).findById(task.getId());
     }
 }
