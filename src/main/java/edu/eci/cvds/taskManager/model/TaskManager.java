@@ -64,8 +64,8 @@ public class TaskManager {
         }
     }
 
-    /**Map
-     * RetrMapll tasks managed by the TaskManager.
+    /**
+     * Gets tasks managed by the TaskManager.
      *
      * @return A Map containing all tasks, where the key is the task ID and the value is the Task object.
      */
