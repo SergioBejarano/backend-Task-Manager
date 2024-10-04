@@ -49,7 +49,8 @@ jobs:
           cache: maven
 
       - name: Use TASKS_API_URL Variable
-        run: echo "API URL: ${{ vars.TASKS_API_URL }}"
+        run: |
+          echo "API URL: ${{ vars.TASKS_API_URL }}"
       
       - name: Verify with Maven
         run: mvn test
