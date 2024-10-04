@@ -35,7 +35,7 @@ public class Task {
      * @param completed A boolean value of task.
      * @param difficultyLevel The level of difficulty of the task (Low, Medium, High).
      * @param priority The priority of the task, where 1 is the lowest priority and 5 is the highest.
-     * @param averageDevelopmentTime The average time required to complete the task, measured in minutes.
+     * @param averageDevelopmentTime The average time required to complete the task, measured in hours.
      */
     public Task(String id, String description, boolean completed, DifficultyLevel difficultyLevel, int priority, int averageDevelopmentTime) {
         this.id = id;
@@ -55,25 +55,12 @@ public class Task {
     public Task(String description) {
         this.description = description;
         this.completed = false;
-    }
+        this.difficultyLevel = DifficultyLevel.LOW;
+        this.priority = 1;
+        this.averageDevelopmentTime = 0;
 
-    /**
-     * Constructor for Task without id.
-     *
-     * @param id The ID of task
-     * @param description The description of task.
-     * @param completed A boolean value of task.
-     * @param difficultyLevel The level of difficulty of the task (Low, Medium, High).
-     * @param priority The priority of the task, where 1 is the lowest priority and 5 is the highest.
-     * @param averageDevelopmentTime The average time required to complete the task, measured in minutes.
-     */
-    public Task(String description, DifficultyLevel difficultyLevel, int priority, int averageDevelopmentTime) {
-        this.description = description;
-        this.completed = false;
-        this.difficultyLevel = difficultyLevel;
-        this.priority = priority;
-        this.averageDevelopmentTime = averageDevelopmentTime;
     }
+    
 
     /**
      * Gets the unique ID of the task.
@@ -172,7 +159,7 @@ public class Task {
     /**
      * Gets the average development time for the task.
      *
-     * @return The average development time in minutes.
+     * @return The average development time in hours.
      */
     public int getAverageDevelopmentTime() {
         return averageDevelopmentTime;

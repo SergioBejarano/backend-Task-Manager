@@ -29,6 +29,12 @@ public class TaskManager {
         if (task == null || task.getId() == null) {
             throw new IllegalArgumentException("Task or task ID cannot be null");
         }
+        if (task.getPriority() < 1 || task.getPriority() > 5) {
+            throw new IllegalArgumentException("Priority must be between 1 and 5");
+        }
+        if (task.getAverageDevelopmentTime() < 0) {
+            throw new IllegalArgumentException("Average development time cannot be negative");
+        }
         tasks.put(task.getId(), task);
     }
 
