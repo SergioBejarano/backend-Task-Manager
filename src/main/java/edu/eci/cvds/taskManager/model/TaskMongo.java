@@ -26,7 +26,7 @@ public class TaskMongo extends Task {
      * @param task A task object to copy data from.
      */
     public TaskMongo(Task task) {
-        super(task.getId(), task.getDescription(), task.isCompleted());
+        super(task.getId(), task.getDescription(), task.isCompleted(), task.getDifficultyLevel(), task.getPriority(), task.getAverageDevelopmentTime());
         this.id = task.getId();
     }
 
@@ -48,14 +48,4 @@ public class TaskMongo extends Task {
     public String getId() {
         return id;
     }
-
-    /**
-     * Sets the unique ID of the task.
-     *
-     * @param id The ID to set for the task.
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-
 }

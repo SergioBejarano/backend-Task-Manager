@@ -1,6 +1,8 @@
 package edu.eci.cvds.taskManager;
 
 import edu.eci.cvds.taskManager.model.*;
+import edu.eci.cvds.taskManager.model.Task.DifficultyLevel;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -134,5 +136,50 @@ class TaskManagerApplicationTests {
 		taskManager.addTask(task1);
 		taskManager.addTask(task2);
 		assertEquals(2, taskManager.getAllTasks().size());
+	}
+
+	@Test
+	void shouldSetDifficultyLevel() {
+		Task task1 = new Task("Task 1");
+		task1.setId("7");
+		task1.setDifficultyLevel(DifficultyLevel.MEDIUM);
+		taskManager.addTask(task1);
+		assertEquals(DifficultyLevel.MEDIUM, taskManager.getTask("7").getDifficultyLevel());
+	}
+
+	@Test
+	void shouldSetPriority() {
+		Task task1 = new Task("Task 1");
+		task1.setId("7");
+		task1.setPriority(5);
+		taskManager.addTask(task1);
+		assertEquals(5, taskManager.getTask("7").getPriority());
+	}
+
+	@Test
+	void shouldNotSetPriority() {
+		Task task1 = new Task("Task 1");
+		task1.setId("7");
+		assertThrows(IllegalArgumentException.class, () -> task1.setPriority(-1),
+                "Adding task with null ID should throw IllegalArgumentException");
+		assertThrows(IllegalArgumentException.class, () -> task1.setPriority(10),
+		"Adding task with null ID should throw IllegalArgumentException");
+	}
+
+	@Test
+	void shouldSetAverageDevelopmentTime() {
+		Task task1 = new Task("Task 1");
+		task1.setId("7");
+		task1.setAverageDevelopmentTime(10);
+		taskManager.addTask(task1);
+		assertEquals(10, taskManager.getTask("7").getAverageDevelopmentTime());
+	}
+
+	@Test
+	void shouldNotSetAverageDevelopmentTime() {
+		Task task1 = new Task("Task 1");
+		task1.setId("7");
+		assertThrows(IllegalArgumentException.class, () -> task1.setAverageDevelopmentTime(-1),
+                "Adding task with null ID should throw IllegalArgumentException");
 	}
 }
