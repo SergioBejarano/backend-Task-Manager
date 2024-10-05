@@ -26,7 +26,7 @@ jobs:
           distribution: 'temurin'  # O 'zulu' si prefieres
 
       - name: 'Build with Maven'
-        run: mvn clean package
+        run: mvn compile
 
       - name: 'Upload build artifact'
         uses: actions/upload-artifact@v3
@@ -64,17 +64,21 @@ jobs:
     needs: test
 
     steps:
-      - name: 'Checkout GitHub Action'
-        uses: actions/checkout@v4
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v4
 
-      - name: 'Download build artifact'
-        uses: actions/download-artifact@v3
-        with:
-          name: app-jar
+    - name: 'Set up JDK ${{ env.JAVA_VERSION }}'
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ env.JAVA_VERSION }}
+        distribution: 'temurin'  
 
-      - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+    - name: 'Build with Maven'
+      run: mvn clean package
+
+    - name: 'Deploy to Azure Web App'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}  
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }} 
