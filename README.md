@@ -140,8 +140,46 @@ Luego, se verifica en la base de datos en MongDB Cloud:
 
 ![image](https://github.com/user-attachments/assets/b9e6e7fb-ad64-4412-bb15-ee8c11293adf)
 
-## Conexión a Base de Datos Postgres - Azure
 
+# LABORATORIO 5
+
+## PARTE I. DEVOPS / CI-CD
+
+### Creando los Pipelines (CI - Continous Integration)
+
+- Primero se empieza creando las variables necesarias dentro de "secrets and variables" en la configuracion del repositorio
+
+![imagen](https://github.com/user-attachments/assets/e8f103a3-ebac-4267-87bb-1215d7e442c7)
+
+- Ahora configuramos un "Action" que pueda desplegar los trabajos solicitados por el laboratorio y además despliegue la variable que acabamos de crear:
+
+- Empezamos por el "Job" de construcción:
+
+![imagen](https://github.com/user-attachments/assets/693a5ea1-58ac-49ae-9dbc-2cb7b532f1d8)
+
+- Ahora realizamos la logica necesaria para que se ejecuten las pruebas:
+
+![imagen](https://github.com/user-attachments/assets/7eabed12-2311-4759-bc7f-22736476c274)
+
+- Finalmente hacemos un "deploy" pero momentaneamente solo ejecutara la linea: "En construcción":
+
+![imagen](https://github.com/user-attachments/assets/f24ed757-4900-40ef-b8fd-cfc47506238d)
+
+- Verificamos que al hacer un commit se esten ejecutando las pruebas:
+
+![imagen](https://github.com/user-attachments/assets/c793a317-b851-4ee8-8ec9-a5f4b75b3a14)
+
+### Creacion de test pedidos en el laboratorio:
+
+- Iniciamos creando la clase de pruebas "TaskServiceTest"
+
+- Implementamos la logica necesaria de cada test para que se ejecute y verificamos que lo haga correctamente.
+
+![imagen](https://github.com/user-attachments/assets/a816390f-b0a9-43f7-bf35-1c158458e8b0)
+
+### Desplegando en Azure usando CI/CD (Continous Deployment / Continous Delivery)
+
+#### Conexión a Base de Datos Postgres - Azure
 
 
 Para este proceso se crea un nuevo recurso de tipo `Azure Database for PostgreSQL flexible servers`:
@@ -150,7 +188,7 @@ Para este proceso se crea un nuevo recurso de tipo `Azure Database for PostgreSQ
 ![image](https://github.com/user-attachments/assets/d91e3974-5440-42e2-8f1b-40363786871b)
 
 
-Se realiza la configuración con las mínimas características:
+Se realiza la configuración con las mínimas características: 
 
 ![image](https://github.com/user-attachments/assets/08b9a995-facd-403d-a29c-988e8395f09a)
 
@@ -204,11 +242,10 @@ spring.datasource.url=jdbc:postgresql://taskmanagerdb.postgres.database.azure.co
 De igual manera, se cambiar la URL por la misma anterior ya que se pasa de tener la base de datos en local a alojarla en la nube con Azure.
 
 
-
-### Validaciones
+#### Validaciones
 
 - Base de datos con Postgres - Relacional
-
+  
 Desde Cloud Shell se valida con consultas la información mostrada en la interfaz gráfica:
 
 ![image](https://github.com/user-attachments/assets/e9242d23-a210-407f-9bdb-6190e9d3e515)
@@ -223,43 +260,6 @@ La información registrada en ambas bases de datos corresponde a lo que se ve en
 
 ![image](https://github.com/user-attachments/assets/54d664ea-d39a-4bc4-8103-b1790f58d1fb)
 
-# LABORATORIO 5
-
-## PARTE I. DEVOPS / CI-CD
-
-### Creando los Pipelines (CI - Continous Integration)
-
-- Primero se empieza creando las variables necesarias dentro de "secrets and variables" en la configuracion del repositorio
-
-![imagen](https://github.com/user-attachments/assets/e8f103a3-ebac-4267-87bb-1215d7e442c7)
-
-- Ahora configuramos un "Action" que pueda desplegar los trabajos solicitados por el laboratorio y además despliegue la variable que acabamos de crear:
-
-- Empezamos por el "Job" de construcción:
-
-![imagen](https://github.com/user-attachments/assets/693a5ea1-58ac-49ae-9dbc-2cb7b532f1d8)
-
-- Ahora realizamos la logica necesaria para que se ejecuten las pruebas:
-
-![imagen](https://github.com/user-attachments/assets/7eabed12-2311-4759-bc7f-22736476c274)
-
-- Finalmente hacemos un "deploy" pero momentaneamente solo ejecutara la linea: "En construcción":
-
-![imagen](https://github.com/user-attachments/assets/f24ed757-4900-40ef-b8fd-cfc47506238d)
-
-- Verificamos que al hacer un commit se esten ejecutando las pruebas:
-
-![imagen](https://github.com/user-attachments/assets/c793a317-b851-4ee8-8ec9-a5f4b75b3a14)
-
-### Creacion de test pedidos en el laboratorio:
-
-- Iniciamos creando la clase de pruebas "TaskServiceTest"
-
-- Implementamos la logica necesaria de cada test para que se ejecute y verificamos que lo haga correctamente.
-
-![imagen](https://github.com/user-attachments/assets/a816390f-b0a9-43f7-bf35-1c158458e8b0)
-
-### Desplegando en Azure usando CI/CD (Continous Deployment / Continous Delivery)
 
 ## PARTE II GRÁFICOS
 
