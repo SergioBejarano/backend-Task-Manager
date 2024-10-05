@@ -90,4 +90,4 @@ jobs:
           app-name: 'taskManager' 
           slot-name: 'production'            
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  
-          package: target/*.jar
+          package: target/taskManager-0.0.1-SNAPSHOT.jar
