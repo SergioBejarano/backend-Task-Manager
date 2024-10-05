@@ -1,12 +1,18 @@
 package edu.eci.cvds.taskManager.controller;
 
 import edu.eci.cvds.taskManager.model.Task;
+import edu.eci.cvds.taskManager.model.TaskMongo;
+import edu.eci.cvds.taskManager.repositories.mongo.TaskMongoRepository;
+import edu.eci.cvds.taskManager.repositories.postgres.TaskPostgresRepository;
 import edu.eci.cvds.taskManager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * The TaskController class handles HTTP requests for managing tasks.
@@ -14,7 +20,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/tasks")
-@CrossOrigin(origins = "http://localhost:63342")
 public class TaskController {
 
     @Autowired
@@ -26,7 +31,7 @@ public class TaskController {
      * @return A list of all tasks.
      */
     @GetMapping
-    public List<Task> getAllTasks() {
+    public List<TaskMongo> getAllTasks() {
         return taskService.findAll();
     }
 
@@ -37,7 +42,7 @@ public class TaskController {
      * @return The created Task object.
      */
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
+    public Task createTask(@RequestBody Task task)  {
         return taskService.save(task);
     }
 
@@ -60,8 +65,18 @@ public class TaskController {
      * @return ResponseEntity indicating the outcome of the operation.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable String id) {
+    public ResponseEntity<Void> deleteTask(@PathVariable String id)  {
         taskService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Generate a list of random tasks.
+     *
+     * @return a list of randomly generated tasks.
+     */
+    @GetMapping("/tareas/generar")
+    public List<Task> generateRandomTasks() {
+        return taskService.generateRandomTasks();
     }
 }

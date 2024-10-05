@@ -1,43 +1,45 @@
 package edu.eci.cvds.taskManager.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document; // Para MongoDB
-import javax.persistence.Entity; // Para JPA
-import javax.persistence.GeneratedValue; // Para JPA
-import javax.persistence.GenerationType; // Para JPA
-import javax.persistence.Table; // Para JPA
-import javax.persistence.Column; // Para JPA
+import java.util.UUID;
 
 /**
  * The Task class represents a task in the task management application.
- * It includes information about the task's ID, description, and completion
- * status.
+ * It includes information about the task's ID, description, completion status
+ * level of difficulty, priority and average development time.
  */
-@Document(collection = "tasks") // Para MongoDB
-@Entity // Para PostgreSQL (JPA)
-@Table(name = "tasks") // Para PostgreSQL (tabla "tasks")
 public class Task {
 
-    @Id // Anotación para JPA
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Para PostgreSQL (JPA)
     private String id;
-
-    @Column(name = "description") // Para PostgreSQL (JPA)
     private String description;
-
-    @Column(name = "completed") // Para PostgreSQL (JPA)
     private boolean completed;
+    private String difficultyLevel;
+    private int priority;
+    private int averageDevelopmentTime;
 
     /**
      * Default constructor for Task.
      */
 
-    public Task() {}
+    public Task() {this.id = UUID.randomUUID().toString();}
 
-    public Task(String id, String description, boolean completed) {
+
+    /**
+     * Constructor for Task.
+     *
+     * @param id The ID of task
+     * @param description The description of task.
+     * @param completed A boolean value of task.
+     * @param difficultyLevel The level of difficulty of the task (Low, Medium, High).
+     * @param priority The priority of the task, where 1 is the lowest priority and 5 is the highest.
+     * @param averageDevelopmentTime The average time required to complete the task, measured in hours.
+     */
+    public Task(String id, String description, boolean completed, String difficultyLevel, int priority, int averageDevelopmentTime) {
         this.id = id;
         this.description = description;
         this.completed = completed;
+        this.difficultyLevel = difficultyLevel;
+        this.priority = priority;
+        this.averageDevelopmentTime = averageDevelopmentTime;
     }
 
 
@@ -49,7 +51,11 @@ public class Task {
     public Task(String description) {
         this.description = description;
         this.completed = false;
+        this.difficultyLevel = "LOW";
+        this.priority = 1;
+        this.averageDevelopmentTime = 0;
     }
+    
 
     /**
      * Gets the unique ID of the task.
@@ -104,4 +110,73 @@ public class Task {
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
+
+    /**
+     * Gets the difficulty level of the task.
+     *
+     * @return The difficulty level of the task.
+     */
+    public String getDifficultyLevel() {
+        return difficultyLevel;
+    }
+
+    /**
+     * Sets the difficulty level of the task.
+     *
+     * @param difficultyLevel The difficulty level to set.
+     * @throws IllegalArgumentException if the difficulty level is not "LOW", "MEDIUM", or "HIGH".
+     */
+    public void setDifficultyLevel(String difficultyLevel) {
+        if (!difficultyLevel.equalsIgnoreCase("LOW") && 
+            !difficultyLevel.equalsIgnoreCase("MEDIUM") && 
+            !difficultyLevel.equalsIgnoreCase("HIGH")) {
+            throw new IllegalArgumentException("Difficulty level must be LOW, MEDIUM, or HIGH");
+        }
+        this.difficultyLevel = difficultyLevel.toUpperCase();
+    }
+
+    /**
+     * Gets the priority of the task.
+     *
+     * @return The priority of the task, where 1 is the lowest priority and 5 is the highest.
+     */
+    public int getPriority() {
+        return priority;
+    }
+
+    /**
+     * Sets the priority of the task.
+     *
+     * @param priority The priority to set, which must be between 1 and 5.
+     * @throws IllegalArgumentException if the priority is not between 1 and 5.
+     */
+    public void setPriority(int priority) {
+        if (priority < 1 || priority > 5) {
+            throw new IllegalArgumentException("Priority must be between 1 and 5");
+        }
+        this.priority = priority;
+    }
+
+    /**
+     * Gets the average development time for the task.
+     *
+     * @return The average development time in hours.
+     */
+    public int getAverageDevelopmentTime() {
+        return averageDevelopmentTime;
+    }
+
+    /**
+     * Sets the average development time for the task.
+     *
+     * @param averageDevelopmentTime The average development time to set, which must be non-negative.
+     * @throws IllegalArgumentException if the average development time is negative.
+     */
+    public void setAverageDevelopmentTime(int averageDevelopmentTime) {
+        if (averageDevelopmentTime < 0) {
+            throw new IllegalArgumentException("Average development time cannot be negative");
+        }
+        this.averageDevelopmentTime = averageDevelopmentTime;
+    }
+
 }
