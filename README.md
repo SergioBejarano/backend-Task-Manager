@@ -298,4 +298,33 @@ Hace el llamado al método en TaskService:
 ![image](https://github.com/user-attachments/assets/b0d695a1-4ad4-4a23-b02b-43614294dc32)
 
 
-### Gráficos
+### Bibliotecas de Gráficos
+
+Para elegir la biblioteca de gráficos adecuada para el proyecto, primero revisemos las características de algunas opciones populares como Chart.js, D3.js, Google Charts, y c3.js, evaluando su facilidad de uso, flexibilidad y soporte.
+
+| **Biblioteca**   | **Pros**                                                                                                                                                                                                                   | **Contras**                                                                                                                                                                                                                             |
+|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **D3.js**        | - Gran flexibilidad y control total sobre la visualización. <br> - Amplia personalización y capacidad de integración con otras bibliotecas. <br> - Soporte para manipulación directa del DOM y creación de gráficos interactivos y complejos. <br> - Comunidad activa y extensa documentación. | - Curva de aprendizaje alta. <br> - Requiere conocimientos profundos de JavaScript y SVG. <br> - Crear gráficos sencillos puede ser más complejo en comparación con otras bibliotecas.                                                                                         |
+| **C3.js**        | - Basado en D3.js, pero con una API más sencilla para la creación de gráficos comunes. <br> - Ideal para desarrolladores que no necesitan la flexibilidad completa de D3.js. <br> - Buena documentación y ejemplos.                                                | - Menor flexibilidad que D3.js. <br> - Al ser una capa superior de D3, la optimización puede ser menor en gráficos más complejos. <br> - Personalización limitada en comparación con D3.js.                                                                                      |
+| **Chart.js**     | - Muy fácil de usar y con una curva de aprendizaje baja. <br> - Soporte para gráficos comunes como barras, líneas, pie, entre otros. <br> - Opciones de animación y capacidad para añadir plugins personalizados. <br> - Buena integración con frameworks modernos (React, Angular).                      | - Personalización limitada comparada con D3.js. <br> - Menor soporte para gráficos personalizados y gráficos complejos. <br> - Puede volverse lento para conjuntos de datos muy grandes.                                                                                         |
+| **Google Charts**| - Sencillo de usar y fácil de integrar con cualquier proyecto. <br> - Gráficos atractivos y predefinidos con buena estética. <br> - Capacidad para integrar datos directamente desde Google Sheets y otras plataformas de Google. <br> - Interactividad y accesibilidad. | - Requiere acceso a la API de Google Charts, lo que puede no ser ideal para aplicaciones sin acceso a Internet. <br> - Limitaciones en la personalización y flexibilidad en comparación con D3.js. <br> - Dependencia de los servicios de Google y problemas de privacidad.        |
+
+Basado en las características del proyecto y las gráficas que necesitamos crear, **Chart.js** es la mejor opción.
+
+### Implementacion de Charts.js
+
+Para realizar la implementacion primero creamos la nueva pagina insights junto a sus respectivos .css y .js
+
+![image](https://github.com/user-attachments/assets/3e3f6717-8154-4430-a0f8-92a0b6a66f9b)
+
+Ahora realizamos la estructura principal de la pagina y incluimos Chart.js en la Página
+
+![image](https://github.com/user-attachments/assets/5ffb6a41-0e55-47bf-98c2-cd4029bbb609)
+
+Para mayor comodidad agregamos y diseñamos un menu lateral funcional que permita acceder a ambos modulos (Tasks y Insights) desde la pagina principal
+
+![image](https://github.com/user-attachments/assets/42c3a7e0-23a5-4ef6-9f9c-37c86fe2e1f5)
+
+Y finalmente se implementa los graficos desde el javascript de insights, abstrayendo y calculando los datos provenientes de MongoBD o PostgreSQL
+
+![image](https://github.com/user-attachments/assets/5a9e38ab-20a8-4a77-8c80-302251cac036)

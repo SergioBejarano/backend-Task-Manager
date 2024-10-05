@@ -4,9 +4,6 @@ import edu.eci.cvds.taskManager.model.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import edu.eci.cvds.taskManager.config.MongoDBConfig;
-import edu.eci.cvds.taskManager.config.PostgreSQLConfig;
 
 import java.util.*;
 
