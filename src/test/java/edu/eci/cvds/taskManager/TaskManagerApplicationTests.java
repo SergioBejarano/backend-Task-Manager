@@ -1,7 +1,6 @@
 package edu.eci.cvds.taskManager;
 
 import edu.eci.cvds.taskManager.model.*;
-import edu.eci.cvds.taskManager.model.Task.DifficultyLevel;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -142,9 +141,9 @@ class TaskManagerApplicationTests {
 	void shouldSetDifficultyLevel() {
 		Task task1 = new Task("Task 1");
 		task1.setId("7");
-		task1.setDifficultyLevel(DifficultyLevel.MEDIUM);
+		task1.setDifficultyLevel("MEDIUM");
 		taskManager.addTask(task1);
-		assertEquals(DifficultyLevel.MEDIUM, taskManager.getTask("7").getDifficultyLevel());
+		assertEquals("MEDIUM", taskManager.getTask("7").getDifficultyLevel());
 	}
 
 	@Test

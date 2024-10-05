@@ -1,6 +1,7 @@
 package edu.eci.cvds.taskManager.model;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -28,6 +29,14 @@ public class TaskManager {
     public void addTask(Task task) {
         if (task == null || task.getId() == null) {
             throw new IllegalArgumentException("Task or task ID cannot be null");
+        }
+        switch (task.getDifficultyLevel()) {
+            case "LOW":
+            case "MEDIUM":
+            case "HIGH":
+                break;
+            default:
+            throw new IllegalArgumentException("Task difficulty level must be LOW, MEDIUM or HIGH");
         }
         if (task.getPriority() < 1 || task.getPriority() > 5) {
             throw new IllegalArgumentException("Priority must be between 1 and 5");
