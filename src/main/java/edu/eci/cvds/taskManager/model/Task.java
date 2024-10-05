@@ -58,7 +58,6 @@ public class Task {
         this.difficultyLevel = DifficultyLevel.LOW;
         this.priority = 1;
         this.averageDevelopmentTime = 0;
-
     }
     
 
