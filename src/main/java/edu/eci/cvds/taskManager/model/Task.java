@@ -1,5 +1,8 @@
 package edu.eci.cvds.taskManager.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -15,6 +18,7 @@ public class Task {
     private String difficultyLevel;
     private int priority;
     private int averageDevelopmentTime;
+    public static final List<String> difficultyLevels =  new ArrayList<>(Arrays.asList("LOW", "MEDIUM", "HIGH"));
 
     /**
      * Default constructor for Task.
@@ -127,9 +131,7 @@ public class Task {
      * @throws IllegalArgumentException if the difficulty level is not "LOW", "MEDIUM", or "HIGH".
      */
     public void setDifficultyLevel(String difficultyLevel) {
-        if (!difficultyLevel.equalsIgnoreCase("LOW") && 
-            !difficultyLevel.equalsIgnoreCase("MEDIUM") && 
-            !difficultyLevel.equalsIgnoreCase("HIGH")) {
+        if (!difficultyLevels.contains(difficultyLevel)) {
             throw new IllegalArgumentException("Difficulty level must be LOW, MEDIUM, or HIGH");
         }
         this.difficultyLevel = difficultyLevel.toUpperCase();

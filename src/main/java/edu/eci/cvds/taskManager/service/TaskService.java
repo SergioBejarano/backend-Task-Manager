@@ -109,12 +109,12 @@ public class TaskService {
 
         for (int i = 1; i <= numTasks; i++) {
             Task task = new Task();
-            String[] difficultyLevels = {"LOW", "MEDIUM", "HIGH"};
+            List<String> difficultyLevels = Task.difficultyLevels;
 
             task.setDescription("Tarea generada aleatoriamente número " + i);
             task.setCompleted(random.nextBoolean());
             task.setPriority(random.nextInt(5) + 1);
-            task.setDifficultyLevel(difficultyLevels[random.nextInt(difficultyLevels.length)]);
+            task.setDifficultyLevel(difficultyLevels.get(random.nextInt(difficultyLevels.size())));
             task.setAverageDevelopmentTime(Math.abs(random.nextInt()));
 
             this.save(task);
