@@ -12,13 +12,9 @@ public class Task {
     private String id;
     private String description;
     private boolean completed;
-    private DifficultyLevel difficultyLevel;
+    private String difficultyLevel;
     private int priority;
     private int averageDevelopmentTime;
-
-    public enum DifficultyLevel {
-        LOW, MEDIUM, HIGH
-    }
 
     /**
      * Default constructor for Task.
@@ -37,7 +33,7 @@ public class Task {
      * @param priority The priority of the task, where 1 is the lowest priority and 5 is the highest.
      * @param averageDevelopmentTime The average time required to complete the task, measured in hours.
      */
-    public Task(String id, String description, boolean completed, DifficultyLevel difficultyLevel, int priority, int averageDevelopmentTime) {
+    public Task(String id, String description, boolean completed, String difficultyLevel, int priority, int averageDevelopmentTime) {
         this.id = id;
         this.description = description;
         this.completed = completed;
@@ -55,7 +51,7 @@ public class Task {
     public Task(String description) {
         this.description = description;
         this.completed = false;
-        this.difficultyLevel = DifficultyLevel.LOW;
+        this.difficultyLevel = "LOW";
         this.priority = 1;
         this.averageDevelopmentTime = 0;
     }
@@ -120,7 +116,7 @@ public class Task {
      *
      * @return The difficulty level of the task.
      */
-    public DifficultyLevel getDifficultyLevel() {
+    public String getDifficultyLevel() {
         return difficultyLevel;
     }
 
@@ -128,9 +124,15 @@ public class Task {
      * Sets the difficulty level of the task.
      *
      * @param difficultyLevel The difficulty level to set.
+     * @throws IllegalArgumentException if the difficulty level is not "LOW", "MEDIUM", or "HIGH".
      */
-    public void setDifficultyLevel(DifficultyLevel difficultyLevel) {
-        this.difficultyLevel = difficultyLevel;
+    public void setDifficultyLevel(String difficultyLevel) {
+        if (!difficultyLevel.equalsIgnoreCase("LOW") && 
+            !difficultyLevel.equalsIgnoreCase("MEDIUM") && 
+            !difficultyLevel.equalsIgnoreCase("HIGH")) {
+            throw new IllegalArgumentException("Difficulty level must be LOW, MEDIUM, or HIGH");
+        }
+        this.difficultyLevel = difficultyLevel.toUpperCase();
     }
 
     /**

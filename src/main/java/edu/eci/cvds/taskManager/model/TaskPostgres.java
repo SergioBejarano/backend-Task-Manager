@@ -22,7 +22,7 @@ public class TaskPostgres extends Task {
     private boolean completed;
 
     @Column(name = "difficulty_level")
-    private DifficultyLevel difficultyLevel;
+    private String difficultyLevel;
     
     @Column(name = "priority")
     private int priority;
