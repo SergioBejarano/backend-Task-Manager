@@ -149,7 +149,7 @@ Luego, se verifica en la base de datos en MongDB Cloud:
 
 ### Desplegando en Azure usando CI/CD (Continous Deployment / Continous Delivery)
 
-## Conexión a Base de Datos Postgres - Azure
+#### Conexión a Base de Datos Postgres - Azure
 
 
 
@@ -213,8 +213,7 @@ spring.datasource.url=jdbc:postgresql://taskmanagerdb.postgres.database.azure.co
 De igual manera, se cambiar la URL por la misma anterior ya que se pasa de tener la base de datos en local a alojarla en la nube con Azure.
 
 
-
-### Validaciones
+#### Validaciones
 
 - Base de datos con Postgres - Relacional
   
