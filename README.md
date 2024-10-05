@@ -249,9 +249,14 @@ generateRandomTasks()
 
 Se implementa la lógica necesaria para realizar este método:
 
+![image](https://github.com/user-attachments/assets/4a8daadd-fd82-4a27-bff2-32524e1ca553)
+
+
 #### En TaskController
 
 Hace el llamado al método en TaskService:
+
+![image](https://github.com/user-attachments/assets/b0d695a1-4ad4-4a23-b02b-43614294dc32)
 
 
 ### Gráficos
