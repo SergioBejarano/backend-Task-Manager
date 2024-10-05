@@ -37,6 +37,21 @@ Se define el siguiente puerto:
 server.port=8081
 ```
 
+## Conexión a Base de Datos en PostgreSQL
+
+Para integrar PostgreSQL en el proyecto backend con Spring Boot, primero necesitamos agregar las siguientes dependencias en el archivo `pom.xml`
+
+![image](https://github.com/user-attachments/assets/be1713c4-107f-4eea-bbeb-82f3d13d416b)
+
+Configuramos la Conexión a PostgreSQL en application.properties
+
+![image](https://github.com/user-attachments/assets/139426f4-9702-4a25-bae5-0d1fa257ab6a)
+
+Y finalmente en psql o pgAdmin de postgreSQL, creamos la base de datos y las tablas
+
+![image](https://github.com/user-attachments/assets/18fdcf33-7e4d-4c25-bc77-b0fad06f61c9)
+![image](https://github.com/user-attachments/assets/add2fe04-b9ef-4f4a-9dc2-db0524b8274f)
+
 ### Implementación
 
 
