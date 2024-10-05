@@ -21,6 +21,16 @@ public class TaskPostgres extends Task {
     @Column(name = "completed")
     private boolean completed;
 
+    @Column(name = "difficulty_level")
+    private DifficultyLevel difficultyLevel;
+    
+    @Column(name = "priority")
+    private int priority;
+
+    @Column(name = "average_development_time")
+    private int averageDevelopmentTime;
+
+
     /**
      * Default constructor for TaskPostgres.
      */
@@ -34,11 +44,15 @@ public class TaskPostgres extends Task {
      * @param task A task object to copy data from.
      */
     public TaskPostgres(Task task) {
-        super(task.getId(), task.getDescription(), task.isCompleted());
+        super(task.getId(), task.getDescription(), task.isCompleted(), task.getDifficultyLevel(), task.getPriority(), task.getAverageDevelopmentTime());
         this.id = task.getId();
         this.description = task.getDescription();
         this.completed = task.isCompleted();
+        this.difficultyLevel = task.getDifficultyLevel();
+        this.priority = task.getPriority();
+        this.averageDevelopmentTime = task.getAverageDevelopmentTime();
     }
+    
 
     /**
      * Constructor for TaskPostgres with a description.
@@ -58,14 +72,4 @@ public class TaskPostgres extends Task {
     public String getId() {
         return id;
     }
-
-    /**
-     * Sets the unique ID of the task.
-     *
-     * @param id The ID to set for the task.
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-
 }
