@@ -45,7 +45,7 @@ Posteriormente se realizó su implementación para que las pruebas pasaran.
 ## Pruebas de unidad y cobertura en Jacoco
 
 
-Se crean 14 pruebas de unidad sin el contexto de Spring .
+Se crean las pruebas de unidad sin el contexto de Spring .
 Se modifica el pom para incluir el reporte de cobertura de Jacoco.
 
 Después de implementar el código se obtiene el siguiente reporte:
@@ -264,6 +264,17 @@ La información registrada en ambas bases de datos corresponde a lo que se ve en
 ## PARTE II GRÁFICOS
 
 ### Nuevas características de Task
+
+Añadir 3 nuevos atributos para Task, nivel de dificultad, prioridad y tiempo promedio de desarrollo. Para esto se adaptaron las pruebas (y se añadieron más para cubrir las nuevas características) e implementación, así como las clases responsables de trasladar la información de los objetos a la base de datos.
+Probando la refactorización:
+
+![image](https://github.com/user-attachments/assets/ec5db27d-5463-4ffa-8fd6-9b16eee065f8)
+
+Covertura de Jacoco:
+
+![image](https://github.com/user-attachments/assets/ea44128d-9f19-4239-9ef7-c2808106bfd3)
+
+
 
 ### Tareas aleatorias
 
