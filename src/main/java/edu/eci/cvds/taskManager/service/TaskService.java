@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -86,5 +88,38 @@ public class TaskService {
             throw new RuntimeException(e);
         }
         return taskMongoRepository.save(taskMongo);
+    }
+
+    /**
+     * Generates a list of random tasks. This method creates a random number of tasks (between 100 and 1000) and assigns random values
+     * to their various attributes. Each task is generated with the following values:
+     * - **Description**: A string indicating that the task was randomly generated along with its number.
+     * - **Completed**: A random boolean value indicating whether the task is completed or not.
+     * - **Priority**: A random integer between 0 and 5 representing the priority of the task.
+     * - **Difficulty level**: A random value from the `DifficultyLevel` enum (which can be LOW, MEDIUM, or HIGH).
+     * - **Average development time**: A positive integer representing the estimated time to develop the task.
+     * Each generated task is saved using the `save()` method and added to the list of tasks.
+     *
+     * @return a list of randomly generated tasks.
+     */
+    public List<Task> generateRandomTasks() {
+        Random random = new Random();
+        int numTasks = random.nextInt(901) + 100; // Genera entre 100 y 1000 tasks
+        List<Task> tasks = new ArrayList<>();
+
+        for (int i = 1; i <= numTasks; i++) {
+            Task task = new Task();
+            Task.DifficultyLevel[] difficultyLevels = Task.DifficultyLevel.values();
+
+            task.setDescription("Tarea generada aleatoriamente número " + i);
+            task.setCompleted(random.nextBoolean());
+            task.setPriority(random.nextInt(6));
+            task.setDifficultyLevel(difficultyLevels[random.nextInt(difficultyLevels.length)]);
+            task.setAverageDevelopmentTime(Math.abs(random.nextInt()));
+
+            this.save(task);
+            tasks.add(task);
+        }
+        return tasks;
     }
 }
