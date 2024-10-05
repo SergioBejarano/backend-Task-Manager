@@ -229,8 +229,37 @@ La información registrada en ambas bases de datos corresponde a lo que se ve en
 
 ### Creando los Pipelines (CI - Continous Integration)
 
-### Desplegando en Azure usando CI/CD (Continous Deployment / Continous Delivery)
+- Primero se empieza creando las variables necesarias dentro de "secrets and variables" en la configuracion del repositorio
 
+![imagen](https://github.com/user-attachments/assets/e8f103a3-ebac-4267-87bb-1215d7e442c7)
+
+- Ahora configuramos un "Action" que pueda desplegar los trabajos solicitados por el laboratorio y además despliegue la variable que acabamos de crear:
+
+- Empezamos por el "Job" de construcción:
+
+![imagen](https://github.com/user-attachments/assets/693a5ea1-58ac-49ae-9dbc-2cb7b532f1d8)
+
+- Ahora realizamos la logica necesaria para que se ejecuten las pruebas:
+
+![imagen](https://github.com/user-attachments/assets/7eabed12-2311-4759-bc7f-22736476c274)
+
+- Finalmente hacemos un "deploy" pero momentaneamente solo ejecutara la linea: "En construcción":
+
+![imagen](https://github.com/user-attachments/assets/f24ed757-4900-40ef-b8fd-cfc47506238d)
+
+- Verificamos que al hacer un commit se esten ejecutando las pruebas:
+
+![imagen](https://github.com/user-attachments/assets/c793a317-b851-4ee8-8ec9-a5f4b75b3a14)
+
+### Creacion de test pedidos en el laboratorio:
+
+- Iniciamos creando la clase de pruebas "TaskServiceTest"
+
+- Implementamos la logica necesaria de cada test para que se ejecute y verificamos que lo haga correctamente.
+
+![imagen](https://github.com/user-attachments/assets/a816390f-b0a9-43f7-bf35-1c158458e8b0)
+
+### Desplegando en Azure usando CI/CD (Continous Deployment / Continous Delivery)
 
 ## PARTE II GRÁFICOS
 
