@@ -1,6 +1,5 @@
 # LABORATORIO 4
 
-
 ### Implementación
 
 
@@ -14,7 +13,6 @@ La implementación consta de tres componentes principales:
 
 
 ### Metodología TDD
-
 
 **Añadir Tareas**\
 Se realizaron las pruebas necesarias para el método `addTask`
@@ -97,6 +95,7 @@ Y finalmente en psql o pgAdmin de postgreSQL, creamos la base de datos y las tab
 
 ![image](https://github.com/user-attachments/assets/18fdcf33-7e4d-4c25-bc77-b0fad06f61c9)
 ![image](https://github.com/user-attachments/assets/add2fe04-b9ef-4f4a-9dc2-db0524b8274f)
+
 
 ### Pruebas con PostMan
 
@@ -261,3 +260,85 @@ Hace el llamado al método en TaskService:
 
 ### Gráficos
 
+## Conexión a Base de Datos Postgres - Azure
+
+
+
+Para este proceso se crea un nuevo recurso de tipo `Azure Database for PostgreSQL flexible servers`:
+
+
+![image](https://github.com/user-attachments/assets/d91e3974-5440-42e2-8f1b-40363786871b)
+
+
+Se realiza la configuración con las mínimas características: 
+
+![image](https://github.com/user-attachments/assets/08b9a995-facd-403d-a29c-988e8395f09a)
+
+
+Se crea la base de datos `taskmanagerdb`:
+
+![image](https://github.com/user-attachments/assets/2352b5af-60f1-402b-9fef-3531ef89b6a9)
+
+
+Desde Cloud Shell se accede a la base de datos y se procede a crear la tabla `tasks`:
+
+```sh
+CREATE TABLE tasks (id SERIAL PRIMARY KEY, description TEXT NOT NULL, completed BOOLEAN DEFAULT FALSE);
+```
+
+Se hace una correción del tipo para id:
+
+```sh
+ALTER TABLE tasks ALTER COLUMN id TYPE VARCHAR;
+```
+
+Luego el usuario con la respectiva clave de acceso:
+
+```sh
+CREATE USER user_taskmanager WITH PASSWORD 'taskmanager';
+```
+
+Y se otorgan privilegios a este usuario:
+
+```sh
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO user_taskmanager;
+```
+
+```sh
+GRANT ALL PRIVILEGES ON DATABASE taskmanagerdb TO user_taskmanager;
+```
+
+Se realizan los siguientes ajustes en el proyecto:
+
+- En `application.properties`
+
+Se modifica la línea correspondiente a la cadena de conexión para PostgreSQL con:
+
+```sh
+spring.datasource.url=jdbc:postgresql://taskmanagerdb.postgres.database.azure.com:5432/taskmanagerdb?sslmode=require
+```
+
+
+- En `edu.eci.cvds.taskManager.databasePostgres`
+
+De igual manera, se cambiar la URL por la misma anterior ya que se pasa de tener la base de datos en local a alojarla en la nube con Azure.
+
+
+
+### Validaciones
+
+- Base de datos con Postgres - Relacional
+  
+Desde Cloud Shell se valida con consultas la información mostrada en la interfaz gráfica:
+
+![image](https://github.com/user-attachments/assets/e9242d23-a210-407f-9bdb-6190e9d3e515)
+
+
+- Base de datos con MongoDB - No Relacional
+
+![image](https://github.com/user-attachments/assets/f5e692fc-7f7a-45b9-8275-04f6c218628f)
+
+
+La información registrada en ambas bases de datos corresponde a lo que se ve en interfaz gráfica:
+
+![image](https://github.com/user-attachments/assets/54d664ea-d39a-4bc4-8103-b1790f58d1fb)
