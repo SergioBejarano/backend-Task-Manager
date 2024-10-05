@@ -261,6 +261,38 @@ La información registrada en ambas bases de datos corresponde a lo que se ve en
 ![image](https://github.com/user-attachments/assets/54d664ea-d39a-4bc4-8103-b1790f58d1fb)
 
 
+## DESPLIEGUE EN AZURE
+
+Se crea App Service para la capa de backend:
+
+![image](https://github.com/user-attachments/assets/70698c10-55c3-4c10-90e4-9b670c7d6e64)
+
+En `Deployment Center - settings` se realiza la vinculación con el repositorio:
+
+![image](https://github.com/user-attachments/assets/3794578a-cd86-4073-bf05-09426c9feb6f)
+
+Se descarga el `publish profile`:
+
+
+![image](https://github.com/user-attachments/assets/7fdcb828-382b-48b1-b32d-5126917c0d03)
+
+
+
+Seguido a esto, se actualizan variables de entorno:
+
+![image](https://github.com/user-attachments/assets/308c3fa3-b370-4b81-a1cc-8969e1de61bb)
+
+Se configura desde `Settings` del repositorio un nuevo secreto cuyo valor corresponde al contenido del `publish profile`:
+
+![image](https://github.com/user-attachments/assets/40909276-bcc9-4bcd-b887-ddbe922c461b)
+
+
+Y se actualiza también el archivo YAML:
+
+![image](https://github.com/user-attachments/assets/bb566847-81f3-433c-9a5c-e709276bb115)
+
+
+
 ## PARTE II GRÁFICOS
 
 ### Nuevas características de Task
@@ -328,3 +360,7 @@ Para mayor comodidad agregamos y diseñamos un menu lateral funcional que permit
 Y finalmente se implementa los graficos desde el javascript de insights, abstrayendo y calculando los datos provenientes de MongoBD o PostgreSQL
 
 ![image](https://github.com/user-attachments/assets/5a9e38ab-20a8-4a77-8c80-302251cac036)
+
+
+
+
