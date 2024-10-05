@@ -75,7 +75,7 @@ public class TaskController {
      *
      * @return a list of randomly generated tasks.
      */
-    @GetMapping("/tareas/generar")
+    @PostMapping("/task/randomTasks")
     public List<Task> generateRandomTasks() {
         return taskService.generateRandomTasks();
     }
