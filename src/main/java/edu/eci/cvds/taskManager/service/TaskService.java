@@ -2,8 +2,10 @@ package edu.eci.cvds.taskManager.service;
 
 import edu.eci.cvds.taskManager.model.Task;
 import edu.eci.cvds.taskManager.model.TaskMongo;
+import edu.eci.cvds.taskManager.model.User;
 import edu.eci.cvds.taskManager.model.TaskPostgres;
 import edu.eci.cvds.taskManager.repositories.mongo.TaskMongoRepository;
+import edu.eci.cvds.taskManager.repositories.postgres.UserRepository;
 import edu.eci.cvds.taskManager.repositories.postgres.TaskPostgresRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 
@@ -24,12 +27,14 @@ public class TaskService {
 
     private final TaskMongoRepository taskMongoRepository;
 
+    private final UserRepository userRepository;
     private final TaskPostgresRepository taskPostgresRepository;
 
     @Autowired
-    public TaskService(TaskMongoRepository taskMongoRepository, TaskPostgresRepository taskPostgresRepository) {
+    public TaskService(TaskMongoRepository taskMongoRepository, TaskPostgresRepository taskPostgresRepository,UserRepository NewUserRepository) {
         this.taskMongoRepository = taskMongoRepository;
         this.taskPostgresRepository = taskPostgresRepository;
+        this.userRepository = NewUserRepository;
     }
 
     /**
@@ -40,6 +45,24 @@ public class TaskService {
     public List<TaskMongo> findAll() {
         return taskMongoRepository.findAll();
 
+    }
+
+    /**
+     * Attempts to log in a user with the provided username and password.
+     *
+     * @param username The username of the user.
+     * @param password The password of the user.
+     * @return The authenticated User object.
+     * @throws RuntimeException if authentication fails.
+     */
+    public User login(String username, String password) {
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (((Optional<?>) user).isPresent() && user.get().getPassword().equals(password)) {
+            return user.get(); 
+        } else {
+            throw new RuntimeException("Invalid username or password");
+        }
     }
 
     /**
