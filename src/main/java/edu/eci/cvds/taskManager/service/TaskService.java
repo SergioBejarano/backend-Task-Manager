@@ -5,10 +5,12 @@ import edu.eci.cvds.taskManager.model.TaskMongo;
 import edu.eci.cvds.taskManager.model.User;
 import edu.eci.cvds.taskManager.model.TaskPostgres;
 import edu.eci.cvds.taskManager.repositories.mongo.TaskMongoRepository;
-import edu.eci.cvds.taskManager.repositories.postgres.UserRepository;
+import edu.eci.cvds.taskManager.repositories.UserRepository;
 import edu.eci.cvds.taskManager.repositories.postgres.TaskPostgresRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -43,8 +45,21 @@ public class TaskService {
      * @return A list of all tasks from both databases.
      */
     public List<TaskMongo> findAll() {
-        return taskMongoRepository.findAll();
+        User authenticatedUser = getAuthenticatedUser();
+        List<TaskMongo> tasksMongo = taskMongoRepository.findByUserId(authenticatedUser.getId());
+        return tasksMongo;
 
+    }
+
+    /**
+     * Retrieves the currently authenticated user from the security context.
+     *
+     * @return The authenticated User object.
+     */
+    private User getAuthenticatedUser() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
     /**
@@ -72,6 +87,8 @@ public class TaskService {
      * @return The saved Task object.
      */
     public Task save(Task task)  {
+        User authenticatedUser = getAuthenticatedUser();
+        task.setUserId(authenticatedUser.getId());
         TaskMongo taskMongo = new TaskMongo(task);
         TaskPostgres taskPostgres = new TaskPostgres(task);
         try {
