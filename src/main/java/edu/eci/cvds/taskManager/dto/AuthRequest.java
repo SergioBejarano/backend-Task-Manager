@@ -2,6 +2,9 @@ package edu.eci.cvds.taskManager.dto;
 
 public class AuthRequest {
 
+    public AuthRequest(String username) {
+    }
+
     private String username;
     private String password;
 

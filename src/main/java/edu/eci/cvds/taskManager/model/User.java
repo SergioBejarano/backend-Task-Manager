@@ -2,7 +2,7 @@ package edu.eci.cvds.taskManager.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Document(collection = "users")  // Indica que esta clase representa un documento en la colección "users"
 public class User {
 
@@ -38,7 +38,8 @@ public class User {
     }
 
     public String getPassword() {
-        return password;
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
     }
 
     public void setPassword(String password) {
