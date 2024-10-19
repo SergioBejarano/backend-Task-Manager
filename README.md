@@ -287,6 +287,7 @@ Se configura desde `Settings` del repositorio un nuevo secreto cuyo valor corres
 ![image](https://github.com/user-attachments/assets/40909276-bcc9-4bcd-b887-ddbe922c461b)
 
 
+
 Y se actualiza también el archivo YAML:
 
 ![image](https://github.com/user-attachments/assets/bb566847-81f3-433c-9a5c-e709276bb115)
@@ -360,7 +361,5 @@ Para mayor comodidad agregamos y diseñamos un menu lateral funcional que permit
 Y finalmente se implementa los graficos desde el javascript de insights, abstrayendo y calculando los datos provenientes de MongoBD o PostgreSQL
 
 ![image](https://github.com/user-attachments/assets/5a9e38ab-20a8-4a77-8c80-302251cac036)
-
-
 
 
