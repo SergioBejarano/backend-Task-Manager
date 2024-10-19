@@ -37,6 +37,8 @@ public class User {
         this.username = username;
     }
 
+
+    //corregir
     public String getPassword() {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);

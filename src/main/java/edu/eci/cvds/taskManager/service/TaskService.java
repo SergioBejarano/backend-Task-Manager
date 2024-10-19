@@ -7,8 +7,9 @@ import edu.eci.cvds.taskManager.model.TaskPostgres;
 import edu.eci.cvds.taskManager.repositories.mongo.TaskMongoRepository;
 import edu.eci.cvds.taskManager.repositories.UserRepository;
 import edu.eci.cvds.taskManager.repositories.postgres.TaskPostgresRepository;
+import edu.eci.cvds.taskManager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class TaskService {
 
     private final TaskMongoRepository taskMongoRepository;
 
-    private final UserRepository userRepository;
+    private static UserRepository userRepository;
     private final TaskPostgresRepository taskPostgresRepository;
 
     @Autowired
@@ -37,19 +38,25 @@ public class TaskService {
         this.taskMongoRepository = taskMongoRepository;
         this.taskPostgresRepository = taskPostgresRepository;
         this.userRepository = NewUserRepository;
+
     }
 
     /**
      * Retrieves all tasks from both MongoDB and Postgres repositories.
      *
-     * @return A list of all tasks from both databases.
+     * @return A list of all tasks from both databases filtered by the authenticated user.
      */
     public List<TaskMongo> findAll() {
         User authenticatedUser = getAuthenticatedUser();
-        List<TaskMongo> tasksMongo = taskMongoRepository.findByUserId(authenticatedUser.getId());
-        return tasksMongo;
-
-    }
+        String userID = authenticatedUser.getId();
+        List<TaskMongo> tasksMongo = taskMongoRepository.findAll();
+        List<TaskMongo> filteredTasks = new ArrayList<>();
+        for (TaskMongo task : tasksMongo) {
+            if (task.getUserId().equals(userID)) {
+                filteredTasks.add(task);
+            }
+        }
+        return filteredTasks;}
 
     /**
      * Retrieves the currently authenticated user from the security context.
@@ -74,10 +81,21 @@ public class TaskService {
         Optional<User> user = userRepository.findByUsername(username);
 
         if (((Optional<?>) user).isPresent() && user.get().getPassword().equals(password)) {
-            return user.get(); 
+            return user.get();
         } else {
             throw new RuntimeException("Invalid username or password");
         }
+    }
+
+    public static void registerUser(String username, String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(password);
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(encodedPassword);
+
+        userRepository.save(user);
     }
 
     /**
