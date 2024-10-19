@@ -96,7 +96,7 @@ public class TaskService {
      * - **Description**: A string indicating that the task was randomly generated along with its number.
      * - **Completed**: A random boolean value indicating whether the task is completed or not.
      * - **Priority**: A random integer between 0 and 5 representing the priority of the task.
-     * - **Difficulty level**: A random value from the `DifficultyLevel` enum (which can be LOW, MEDIUM, or HIGH).
+     * - **Difficulty level**: A random value from (LOW, MEDIUM, HIGH).
      * - **Average development time**: A positive integer representing the estimated time to develop the task.
      * Each generated task is saved using the `save()` method and added to the list of tasks.
      *
@@ -109,12 +109,12 @@ public class TaskService {
 
         for (int i = 1; i <= numTasks; i++) {
             Task task = new Task();
-            Task.DifficultyLevel[] difficultyLevels = Task.DifficultyLevel.values();
+            List<String> difficultyLevels = Task.difficultyLevels;
 
             task.setDescription("Tarea generada aleatoriamente número " + i);
             task.setCompleted(random.nextBoolean());
-            task.setPriority(random.nextInt(6));
-            task.setDifficultyLevel(difficultyLevels[random.nextInt(difficultyLevels.length)]);
+            task.setPriority(random.nextInt(5) + 1);
+            task.setDifficultyLevel(difficultyLevels.get(random.nextInt(difficultyLevels.size())));
             task.setAverageDevelopmentTime(Math.abs(random.nextInt()));
 
             this.save(task);

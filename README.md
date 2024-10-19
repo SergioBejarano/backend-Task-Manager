@@ -45,7 +45,7 @@ Posteriormente se realizó su implementación para que las pruebas pasaran.
 ## Pruebas de unidad y cobertura en Jacoco
 
 
-Se crean 14 pruebas de unidad sin el contexto de Spring .
+Se crean las pruebas de unidad sin el contexto de Spring .
 Se modifica el pom para incluir el reporte de cobertura de Jacoco.
 
 Después de implementar el código se obtiene el siguiente reporte:
@@ -140,8 +140,46 @@ Luego, se verifica en la base de datos en MongDB Cloud:
 
 ![image](https://github.com/user-attachments/assets/b9e6e7fb-ad64-4412-bb15-ee8c11293adf)
 
-## Conexión a Base de Datos Postgres - Azure
 
+# LABORATORIO 5
+
+## PARTE I. DEVOPS / CI-CD
+
+### Creando los Pipelines (CI - Continous Integration)
+
+- Primero se empieza creando las variables necesarias dentro de "secrets and variables" en la configuracion del repositorio
+
+![imagen](https://github.com/user-attachments/assets/e8f103a3-ebac-4267-87bb-1215d7e442c7)
+
+- Ahora configuramos un "Action" que pueda desplegar los trabajos solicitados por el laboratorio y además despliegue la variable que acabamos de crear:
+
+- Empezamos por el "Job" de construcción:
+
+![imagen](https://github.com/user-attachments/assets/693a5ea1-58ac-49ae-9dbc-2cb7b532f1d8)
+
+- Ahora realizamos la logica necesaria para que se ejecuten las pruebas:
+
+![imagen](https://github.com/user-attachments/assets/7eabed12-2311-4759-bc7f-22736476c274)
+
+- Finalmente hacemos un "deploy" pero momentaneamente solo ejecutara la linea: "En construcción":
+
+![imagen](https://github.com/user-attachments/assets/f24ed757-4900-40ef-b8fd-cfc47506238d)
+
+- Verificamos que al hacer un commit se esten ejecutando las pruebas:
+
+![imagen](https://github.com/user-attachments/assets/c793a317-b851-4ee8-8ec9-a5f4b75b3a14)
+
+#### Creacion de test pedidos en el laboratorio:
+
+- Iniciamos creando la clase de pruebas "TaskServiceTest"
+
+- Implementamos la logica necesaria de cada test para que se ejecute y verificamos que lo haga correctamente.
+
+![imagen](https://github.com/user-attachments/assets/a816390f-b0a9-43f7-bf35-1c158458e8b0)
+
+### Desplegando en Azure usando CI/CD (Continous Deployment / Continous Delivery)
+
+#### Conexión a Base de Datos Postgres - Azure
 
 
 Para este proceso se crea un nuevo recurso de tipo `Azure Database for PostgreSQL flexible servers`:
@@ -150,7 +188,7 @@ Para este proceso se crea un nuevo recurso de tipo `Azure Database for PostgreSQ
 ![image](https://github.com/user-attachments/assets/d91e3974-5440-42e2-8f1b-40363786871b)
 
 
-Se realiza la configuración con las mínimas características:
+Se realiza la configuración con las mínimas características: 
 
 ![image](https://github.com/user-attachments/assets/08b9a995-facd-403d-a29c-988e8395f09a)
 
@@ -204,11 +242,10 @@ spring.datasource.url=jdbc:postgresql://taskmanagerdb.postgres.database.azure.co
 De igual manera, se cambiar la URL por la misma anterior ya que se pasa de tener la base de datos en local a alojarla en la nube con Azure.
 
 
-
-### Validaciones
+#### Validaciones
 
 - Base de datos con Postgres - Relacional
-
+  
 Desde Cloud Shell se valida con consultas la información mostrada en la interfaz gráfica:
 
 ![image](https://github.com/user-attachments/assets/e9242d23-a210-407f-9bdb-6190e9d3e515)
@@ -223,18 +260,54 @@ La información registrada en ambas bases de datos corresponde a lo que se ve en
 
 ![image](https://github.com/user-attachments/assets/54d664ea-d39a-4bc4-8103-b1790f58d1fb)
 
-# LABORATORIO 5
 
-## PARTE I. DEVOPS / CI-CD
+## DESPLIEGUE EN AZURE
 
-### Creando los Pipelines (CI - Continous Integration)
+Se crea App Service para la capa de backend:
 
-### Desplegando en Azure usando CI/CD (Continous Deployment / Continous Delivery)
+![image](https://github.com/user-attachments/assets/70698c10-55c3-4c10-90e4-9b670c7d6e64)
+
+En `Deployment Center - settings` se realiza la vinculación con el repositorio:
+
+![image](https://github.com/user-attachments/assets/3794578a-cd86-4073-bf05-09426c9feb6f)
+
+Se descarga el `publish profile`:
+
+
+![image](https://github.com/user-attachments/assets/7fdcb828-382b-48b1-b32d-5126917c0d03)
+
+
+
+Seguido a esto, se actualizan variables de entorno:
+
+![image](https://github.com/user-attachments/assets/308c3fa3-b370-4b81-a1cc-8969e1de61bb)
+
+Se configura desde `Settings` del repositorio un nuevo secreto cuyo valor corresponde al contenido del `publish profile`:
+
+![image](https://github.com/user-attachments/assets/40909276-bcc9-4bcd-b887-ddbe922c461b)
+
+
+
+Y se actualiza también el archivo YAML:
+
+![image](https://github.com/user-attachments/assets/bb566847-81f3-433c-9a5c-e709276bb115)
+
 
 
 ## PARTE II GRÁFICOS
 
 ### Nuevas características de Task
+
+Añadir 3 nuevos atributos para Task, nivel de dificultad, prioridad y tiempo promedio de desarrollo. Para esto se adaptaron las pruebas (y se añadieron más para cubrir las nuevas características) e implementación, así como las clases responsables de trasladar la información de los objetos a la base de datos.
+Probando la refactorización:
+
+![image](https://github.com/user-attachments/assets/ec5db27d-5463-4ffa-8fd6-9b16eee065f8)
+
+Covertura de Jacoco:
+
+![image](https://github.com/user-attachments/assets/ea44128d-9f19-4239-9ef7-c2808106bfd3)
+
+
 
 ### Tareas aleatorias
 
@@ -258,4 +331,35 @@ Hace el llamado al método en TaskService:
 ![image](https://github.com/user-attachments/assets/b0d695a1-4ad4-4a23-b02b-43614294dc32)
 
 
-### Gráficos
+### Bibliotecas de Gráficos
+
+Para elegir la biblioteca de gráficos adecuada para el proyecto, primero revisemos las características de algunas opciones populares como Chart.js, D3.js, Google Charts, y c3.js, evaluando su facilidad de uso, flexibilidad y soporte.
+
+| **Biblioteca**   | **Pros**                                                                                                                                                                                                                   | **Contras**                                                                                                                                                                                                                             |
+|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **D3.js**        | - Gran flexibilidad y control total sobre la visualización. <br> - Amplia personalización y capacidad de integración con otras bibliotecas. <br> - Soporte para manipulación directa del DOM y creación de gráficos interactivos y complejos. <br> - Comunidad activa y extensa documentación. | - Curva de aprendizaje alta. <br> - Requiere conocimientos profundos de JavaScript y SVG. <br> - Crear gráficos sencillos puede ser más complejo en comparación con otras bibliotecas.                                                                                         |
+| **C3.js**        | - Basado en D3.js, pero con una API más sencilla para la creación de gráficos comunes. <br> - Ideal para desarrolladores que no necesitan la flexibilidad completa de D3.js. <br> - Buena documentación y ejemplos.                                                | - Menor flexibilidad que D3.js. <br> - Al ser una capa superior de D3, la optimización puede ser menor en gráficos más complejos. <br> - Personalización limitada en comparación con D3.js.                                                                                      |
+| **Chart.js**     | - Muy fácil de usar y con una curva de aprendizaje baja. <br> - Soporte para gráficos comunes como barras, líneas, pie, entre otros. <br> - Opciones de animación y capacidad para añadir plugins personalizados. <br> - Buena integración con frameworks modernos (React, Angular).                      | - Personalización limitada comparada con D3.js. <br> - Menor soporte para gráficos personalizados y gráficos complejos. <br> - Puede volverse lento para conjuntos de datos muy grandes.                                                                                         |
+| **Google Charts**| - Sencillo de usar y fácil de integrar con cualquier proyecto. <br> - Gráficos atractivos y predefinidos con buena estética. <br> - Capacidad para integrar datos directamente desde Google Sheets y otras plataformas de Google. <br> - Interactividad y accesibilidad. | - Requiere acceso a la API de Google Charts, lo que puede no ser ideal para aplicaciones sin acceso a Internet. <br> - Limitaciones en la personalización y flexibilidad en comparación con D3.js. <br> - Dependencia de los servicios de Google y problemas de privacidad.        |
+
+Basado en las características del proyecto y las gráficas que necesitamos crear, **Chart.js** es la mejor opción.
+
+### Implementacion de Charts.js
+
+Para realizar la implementacion primero creamos la nueva pagina insights junto a sus respectivos .css y .js
+
+![image](https://github.com/user-attachments/assets/3e3f6717-8154-4430-a0f8-92a0b6a66f9b)
+
+Ahora realizamos la estructura principal de la pagina y incluimos Chart.js en la Página
+
+![image](https://github.com/user-attachments/assets/5ffb6a41-0e55-47bf-98c2-cd4029bbb609)
+
+Para mayor comodidad agregamos y diseñamos un menu lateral funcional que permita acceder a ambos modulos (Tasks y Insights) desde la pagina principal
+
+![image](https://github.com/user-attachments/assets/42c3a7e0-23a5-4ef6-9f9c-37c86fe2e1f5)
+
+Y finalmente se implementa los graficos desde el javascript de insights, abstrayendo y calculando los datos provenientes de MongoBD o PostgreSQL
+
+![image](https://github.com/user-attachments/assets/5a9e38ab-20a8-4a77-8c80-302251cac036)
+
+
