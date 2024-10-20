@@ -1,6 +1,7 @@
 package edu.eci.cvds.taskManager.controller;
 
 import edu.eci.cvds.taskManager.dto.AuthRequest;
+import edu.eci.cvds.taskManager.model.User;
 import edu.eci.cvds.taskManager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+
+import static edu.eci.cvds.taskManager.service.TaskService.loginUser;
 
 
 @RestController
@@ -27,15 +31,20 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody AuthRequest authRequest) {
         Map<String, String> response = new HashMap<>();
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+
+        Optional<User> user = loginUser(authRequest.getUsername(), authRequest.getPassword());
+
+        if (user.isPresent()) {
             response.put("message", "Login successful!");
             return ResponseEntity.ok(response);
-        } catch (AuthenticationException e) {
+        } else {
             response.put("message", "Invalid credentials");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-        }}
+        }
+    }
+
+
+
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody AuthRequest authRequest) {

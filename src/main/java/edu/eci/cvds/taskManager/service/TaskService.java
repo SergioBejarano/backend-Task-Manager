@@ -70,22 +70,31 @@ public class TaskService {
     }
 
     /**
-     * Attempts to log in a user with the provided username and password.
+     * Attempts to authenticate a user by their username and password.
+     * If the username exists and the password matches the stored encoded password,
+     * the authenticated user is returned. Otherwise, an empty Optional is returned.
      *
-     * @param username The username of the user.
-     * @param password The password of the user.
-     * @return The authenticated User object.
-     * @throws RuntimeException if authentication fails.
+     * @param username the username of the user trying to log in
+     * @param password the password provided for authentication
+     * @return an Optional containing the authenticated user if successful, otherwise empty
      */
-    public User login(String username, String password) {
-        Optional<User> user = userRepository.findByUsername(username);
+    public static Optional<User> loginUser(String username, String password) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
 
-        if (((Optional<?>) user).isPresent() && user.get().getPassword().equals(password)) {
-            return user.get();
+        if (!optionalUser.isPresent()) {
+            return Optional.empty();
+        }
+
+        User user = optionalUser.get();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            return Optional.of(user);
         } else {
-            throw new RuntimeException("Invalid username or password");
+            return Optional.empty();
         }
     }
+
 
     public static void registerUser(String username, String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
