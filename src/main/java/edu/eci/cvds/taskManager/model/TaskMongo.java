@@ -56,5 +56,4 @@ public class TaskMongo extends Task {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
 }
