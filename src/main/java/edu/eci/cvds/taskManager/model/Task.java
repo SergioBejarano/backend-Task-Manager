@@ -187,5 +187,8 @@ public class Task {
         this.userId = userId;
     }
 
+    public String getUserId(){
+        return userId;
+    }
 
 }

@@ -46,8 +46,15 @@ public class TaskService {
      */
     public List<TaskMongo> findAll() {
         User authenticatedUser = getAuthenticatedUser();
-        List<TaskMongo> tasksMongo = taskMongoRepository.findByUserId(authenticatedUser.getId());
-        return tasksMongo;
+        String userID = authenticatedUser.getId();
+        List<TaskMongo> tasksMongo = taskMongoRepository.findAll();
+        List<TaskMongo> filteredTasks = new ArrayList<>();
+        for (TaskMongo task : tasksMongo) {
+            if (task.getUserId().equals(userID)) {
+                filteredTasks.add(task);
+            }
+        }
+        return filteredTasks;
 
     }
 

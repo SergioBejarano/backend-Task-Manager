@@ -23,19 +23,27 @@ public class TaskPostgresRepository {
 
     /**
      * Saves a task to the database. If a task with the same ID already exists, it will
-     * update the existing task's description and completion status.
+     * update the existing task's description, completion status, difficulty level, priority,
+     * and average development time.
      *
      * @param task the {@link TaskPostgres} object to be saved
      * @throws SQLException if a database access error occurs
      */
     public void save(TaskPostgres task) throws SQLException {
-        String sql = "INSERT INTO tasks (id, description, completed) VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET description = EXCLUDED.description, completed = EXCLUDED.completed";
+        String sql = "INSERT INTO tasks (id, description, completed, difficulty_level, priority, average_development_time, user_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?) " +
+                "ON CONFLICT (id) DO UPDATE SET description = EXCLUDED.description, completed = EXCLUDED.completed, " +
+                "difficulty_level = EXCLUDED.difficulty_level, priority = EXCLUDED.priority, average_development_time = EXCLUDED.average_development_time";
 
         try (Connection connection = DatabaseConnectionPostgres.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, task.getId());
             statement.setString(2, task.getDescription());
             statement.setBoolean(3, task.isCompleted());
+            statement.setString(4, task.getDifficultyLevel());
+            statement.setInt(5, task.getPriority());
+            statement.setDouble(6, task.getAverageDevelopmentTime());
+            statement.setString(7, task.getUserId());
             statement.executeUpdate();
         }
     }
