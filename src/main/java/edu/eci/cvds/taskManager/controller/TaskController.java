@@ -2,17 +2,12 @@ package edu.eci.cvds.taskManager.controller;
 
 import edu.eci.cvds.taskManager.model.Task;
 import edu.eci.cvds.taskManager.model.TaskMongo;
-import edu.eci.cvds.taskManager.repositories.mongo.TaskMongoRepository;
-import edu.eci.cvds.taskManager.repositories.postgres.TaskPostgresRepository;
 import edu.eci.cvds.taskManager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * The TaskController class handles HTTP requests for managing tasks.
@@ -24,6 +19,8 @@ public class TaskController {
 
     @Autowired
     private TaskService taskService;
+
+
 
     /**
      * Retrieves all tasks.

@@ -12,6 +12,8 @@ import java.util.UUID;
  */
 public class Task {
 
+
+    private String userId;
     private String id;
     private String description;
     private boolean completed;
@@ -180,5 +182,14 @@ public class Task {
         }
         this.averageDevelopmentTime = averageDevelopmentTime;
     }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId(){
+        return userId;
+    }
+
 
 }
