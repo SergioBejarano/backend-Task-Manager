@@ -2,16 +2,21 @@ package edu.eci.cvds.taskManager.service;
 
 import edu.eci.cvds.taskManager.model.Task;
 import edu.eci.cvds.taskManager.model.TaskMongo;
+import edu.eci.cvds.taskManager.model.User;
 import edu.eci.cvds.taskManager.model.TaskPostgres;
 import edu.eci.cvds.taskManager.repositories.mongo.TaskMongoRepository;
+import edu.eci.cvds.taskManager.repositories.UserRepository;
 import edu.eci.cvds.taskManager.repositories.postgres.TaskPostgresRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 
@@ -24,12 +29,14 @@ public class TaskService {
 
     private final TaskMongoRepository taskMongoRepository;
 
+    private final UserRepository userRepository;
     private final TaskPostgresRepository taskPostgresRepository;
 
     @Autowired
-    public TaskService(TaskMongoRepository taskMongoRepository, TaskPostgresRepository taskPostgresRepository) {
+    public TaskService(TaskMongoRepository taskMongoRepository, TaskPostgresRepository taskPostgresRepository,UserRepository NewUserRepository) {
         this.taskMongoRepository = taskMongoRepository;
         this.taskPostgresRepository = taskPostgresRepository;
+        this.userRepository = NewUserRepository;
     }
 
     /**
@@ -38,8 +45,46 @@ public class TaskService {
      * @return A list of all tasks from both databases.
      */
     public List<TaskMongo> findAll() {
-        return taskMongoRepository.findAll();
+        User authenticatedUser = getAuthenticatedUser();
+        String userID = authenticatedUser.getId();
+        List<TaskMongo> tasksMongo = taskMongoRepository.findAll();
+        List<TaskMongo> filteredTasks = new ArrayList<>();
+        for (TaskMongo task : tasksMongo) {
+            if (task.getUserId().equals(userID)) {
+                filteredTasks.add(task);
+            }
+        }
+        return filteredTasks;
 
+    }
+
+    /**
+     * Retrieves the currently authenticated user from the security context.
+     *
+     * @return The authenticated User object.
+     */
+    private User getAuthenticatedUser() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    }
+
+    /**
+     * Attempts to log in a user with the provided username and password.
+     *
+     * @param username The username of the user.
+     * @param password The password of the user.
+     * @return The authenticated User object.
+     * @throws RuntimeException if authentication fails.
+     */
+    public User login(String username, String password) {
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (((Optional<?>) user).isPresent() && user.get().getPassword().equals(password)) {
+            return user.get(); 
+        } else {
+            throw new RuntimeException("Invalid username or password");
+        }
     }
 
     /**
@@ -49,6 +94,8 @@ public class TaskService {
      * @return The saved Task object.
      */
     public Task save(Task task)  {
+        User authenticatedUser = getAuthenticatedUser();
+        task.setUserId(authenticatedUser.getId());
         TaskMongo taskMongo = new TaskMongo(task);
         TaskPostgres taskPostgres = new TaskPostgres(task);
         try {
@@ -122,4 +169,5 @@ public class TaskService {
         }
         return tasks;
     }
+
 }

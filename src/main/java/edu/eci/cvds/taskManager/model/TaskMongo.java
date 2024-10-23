@@ -2,6 +2,7 @@ package edu.eci.cvds.taskManager.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * TaskMongo class specifically for MongoDB persistence.
@@ -12,6 +13,9 @@ public class TaskMongo extends Task {
 
     @Id
     private String id;
+
+    @Field("user_id")
+    private String userId;
 
     /**
      * Default constructor for TaskMongo.
@@ -47,5 +51,9 @@ public class TaskMongo extends Task {
     @Override
     public String getId() {
         return id;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
