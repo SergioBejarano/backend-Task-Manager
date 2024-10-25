@@ -21,4 +21,10 @@ public interface TaskMongoRepository extends MongoRepository<TaskMongo, String> 
      */
     List<TaskMongo> findByUserId(String userId);
 
+    /**
+     * Deletes all tasks associated with a specific user ID from the MongoDB database.
+     *
+     * @param userId The ID of the user whose tasks are to be deleted.
+     */
+    void deleteAllByUserId(String userId);
 }

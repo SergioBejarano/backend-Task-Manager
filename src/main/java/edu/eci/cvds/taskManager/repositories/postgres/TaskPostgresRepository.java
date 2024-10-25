@@ -92,6 +92,22 @@ public class TaskPostgresRepository {
 
 
     /**
+     * Deletes all tasks associated with a specific user from the database.
+     *
+     * @param userId The ID of the user whose tasks are to be deleted.
+     * @throws SQLException if a database access error occurs
+     */
+    public void deleteAllByUserId(String userId) throws SQLException {
+        String deleteSql = "DELETE FROM tasks WHERE user_id = ?";
+        try (Connection connection = DatabaseConnectionPostgres.getConnection();
+             PreparedStatement deleteStatement = connection.prepareStatement(deleteSql)) {
+            deleteStatement.setString(1, userId); // Establecer el parámetro userId en la consulta
+            deleteStatement.executeUpdate(); // Ejecutar la eliminación
+        }
+    }
+
+
+    /**
      * Marks a task as completed in the database.
      *
      * @param id the ID of the task to be marked as completed

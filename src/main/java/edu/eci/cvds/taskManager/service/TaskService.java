@@ -69,23 +69,6 @@ public class TaskService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
-    /**
-     * Attempts to log in a user with the provided username and password.
-     *
-     * @param username The username of the user.
-     * @param password The password of the user.
-     * @return The authenticated User object.
-     * @throws RuntimeException if authentication fails.
-     */
-    public User login(String username, String password) {
-        Optional<User> user = userRepository.findByUsername(username);
-
-        if (((Optional<?>) user).isPresent() && user.get().getPassword().equals(password)) {
-            return user.get(); 
-        } else {
-            throw new RuntimeException("Invalid username or password");
-        }
-    }
 
     /**
      * Saves a new task or updates an existing task in both MongoDB and Postgres repositories.
@@ -118,6 +101,20 @@ public class TaskService {
             throw new RuntimeException(e);
         }
         taskMongoRepository.deleteById(id);
+    }
+
+    /**
+     * Deletes all tasks associated with the authenticated user from both MongoDB and Postgres repositories.
+     */
+    public void deleteAllByUserId()  {
+        User authenticatedUser = getAuthenticatedUser();
+        String userID = authenticatedUser.getId();
+        try {
+            taskPostgresRepository.deleteAllByUserId(userID);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        taskMongoRepository.deleteAllByUserId(userID);
     }
 
     /**
