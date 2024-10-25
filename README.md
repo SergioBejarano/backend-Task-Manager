@@ -362,4 +362,45 @@ Y finalmente se implementa los graficos desde el javascript de insights, abstray
 
 ![image](https://github.com/user-attachments/assets/5a9e38ab-20a8-4a77-8c80-302251cac036)
 
+# LABORATORIO - SEGURIDAD
+
+### Autenticación
+
+Se crea la clase `AuthController` para manejar las solicitudes relacionadas con la autenticación de los usuarios.
+
+La clase `SecurityConfig` para configurar la seguridad de la aplicación.
+
+Y la clase `UserDetailsServiceImpl` que implementa `UserDetailsService` y proporciona la lógica para cargar los datos de usuario para la autenticación.
+
+### Generación de certificado autofirmado
+
+Con el siguiente comando se crea el formato de almacén de claves PKCS12:
+
+```sh
+keytool -genkeypair -alias baeldung -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore baeldung.p12 -validity 3650
+```
+
+**Nota:**
+PKCS12: Public Key Cryptographic Standards es un formato protegido por contraseña que puede contener múltiples certificados y claves; es un formato utilizado en toda la industria.
+
+![image](https://github.com/user-attachments/assets/4542f7cd-59d4-4df6-9abf-3993485ab709)
+
+
+![image](https://github.com/user-attachments/assets/a94a7e2f-a341-4e20-8dcf-028b22826cbe)
+
+
+![image](https://github.com/user-attachments/assets/4db9d52b-b43a-4bb9-adfd-55d28a1d2a8a)
+
+
+En el application.propierties se agrega la siguiente sección, correspondiente a la onfiguración de las propiedades de SSL:
+
+```sh
+server.port=8443  
+server.ssl.enabled=true
+server.ssl.key-store=classpath:ssl/baeldung.p12
+server.ssl.key-store-password=taskManager
+server.ssl.key-store-type=PKCS12
+server.ssl.key-alias=baeldung
+```
+
 
