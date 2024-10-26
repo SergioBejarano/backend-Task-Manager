@@ -26,9 +26,9 @@ public class TaskController {
      *
      * @return A list of all tasks.
      */
-    @GetMapping("/{user}")
-    public List<TaskMongo> getAllTasks() {
-        return taskService.findAll();
+    @GetMapping("/{userName}")
+    public List<TaskPostgres> getAllTasks(@PathVariable String userName) {
+        return taskService.findAll(userName);
     }
 
     /**
@@ -37,7 +37,7 @@ public class TaskController {
      * @param task The Task object to be created.
      * @return The created Task object.
      */
-    @PostMapping("/{user}")
+    @PostMapping()
     public Task createTask(@RequestBody Task task)  {
         return taskService.save(task);
     }
@@ -48,7 +48,7 @@ public class TaskController {
      * @param id The ID of the task to be marked as completed.
      * @return ResponseEntity containing the updated Task object.
      */
-    @PutMapping("/{user}/{id}/complete")
+    @PutMapping("/{id}/complete")
     public ResponseEntity<Task> completeTask(@PathVariable String id) {
         Task updatedTask = taskService.markAsCompleted(id);
         return ResponseEntity.ok(updatedTask);
@@ -60,7 +60,7 @@ public class TaskController {
      * @param id The ID of the task to be deleted.
      * @return ResponseEntity indicating the outcome of the operation.
      */
-    @DeleteMapping("/{user}/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable String id)  {
         taskService.deleteById(id);
         return ResponseEntity.noContent().build();
@@ -69,7 +69,7 @@ public class TaskController {
     /**
      * Deletes all tasks.
      */
-    @DeleteMapping("/{user}")
+    @DeleteMapping()
     public ResponseEntity<Void> deleteAllTasks()  {
         taskService.deleteAllByUserId();
         return ResponseEntity.noContent().build();
@@ -84,7 +84,7 @@ public class TaskController {
      *
      * @return a list of randomly generated tasks.
      */
-    @PostMapping("/{user}/task/randomTasks")
+    @PostMapping("/task/randomTasks")
     public List<Task> generateRandomTasks() {
         return taskService.generateRandomTasks();
     }

@@ -51,18 +51,14 @@ public class TaskService {
      *
      * @return A list of all tasks from both databases.
      */
-    public List<TaskMongo> findAll() {
-        User authenticatedUser = getAuthenticatedUser();
-        String userID = authenticatedUser.getId();
-        List<TaskMongo> tasksMongo = taskMongoRepository.findAll();
-        List<TaskMongo> filteredTasks = new ArrayList<>();
-        for (TaskMongo task : tasksMongo) {
-            if (task.getUserId().equals(userID)) {
-                filteredTasks.add(task);
-            }
+    public List<TaskPostgres> findAll(String nameUser) {
+        try {
+            return taskPostgresRepository.findAllByUser(nameUser);
+        } catch (SQLException e) {
+            System.err.println("Error retrieving tasks for user: " + nameUser);
+            e.printStackTrace();
+            return new ArrayList<>();
         }
-        return filteredTasks;
-
     }
 
     /**

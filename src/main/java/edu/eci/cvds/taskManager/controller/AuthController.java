@@ -36,7 +36,7 @@ public class AuthController {
 
         if (user.isPresent()) {
             response.put("message", "Login successful!");
-            response.put("user", user.get()); // O incluye un token o ID de sesión
+            response.put("user", authRequest.getUsername()); // O incluye un token o ID de sesión
             return ResponseEntity.ok(response);
         } else {
             response.put("message", "Invalid credentials");
