@@ -7,14 +7,11 @@ import edu.eci.cvds.taskManager.model.TaskPostgres;
 import edu.eci.cvds.taskManager.repositories.mongo.TaskMongoRepository;
 import edu.eci.cvds.taskManager.repositories.UserRepository;
 import edu.eci.cvds.taskManager.repositories.postgres.TaskPostgresRepository;
-import edu.eci.cvds.taskManager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 
 
 import java.sql.SQLException;
@@ -44,6 +41,9 @@ public class TaskService {
         this.taskPostgresRepository = taskPostgresRepository;
         this.userRepository = NewUserRepository;
 
+    }
+    public List<TaskPostgres> findAllTasksFromPostgres() throws SQLException {
+        return taskPostgresRepository.findAll();
     }
 
     /**
