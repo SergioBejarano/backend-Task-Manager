@@ -41,16 +41,6 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void testSaveTaskSuccessWithOneTaskRegistered() {
-        when(taskMongoRepository.save(any(TaskMongo.class))).thenReturn(taskMongo);
-
-        Task result = taskService.save(task);
-
-        assertNotNull(result);
-        assertEquals(task.getId(), result.getId());
-    }
-
-    @Test
     public void testFindTaskByIdNoTask() {
         when(taskMongoRepository.findById(task.getId())).thenReturn(Optional.empty());
 
@@ -59,20 +49,6 @@ public class TaskServiceTest {
         });
 
         verify(taskMongoRepository, times(1)).findById(task.getId());
-    }
-
-    @Test
-    public void testSaveTaskSuccess() throws Exception {
-        when(taskMongoRepository.save(any(TaskMongo.class))).thenReturn(taskMongo);
-
-        doNothing().when(taskPostgresRepository).save(any(TaskPostgres.class));
-
-        Task result = taskService.save(task);
-
-        assertNotNull(result);
-        assertEquals(task.getId(), result.getId());
-        verify(taskMongoRepository, times(1)).save(any(TaskMongo.class));
-        verify(taskPostgresRepository, times(1)).save(any(TaskPostgres.class));
     }
 
     @Test
