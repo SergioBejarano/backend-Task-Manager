@@ -2,6 +2,7 @@ package edu.eci.cvds.taskManager.controller;
 
 import edu.eci.cvds.taskManager.model.Task;
 import edu.eci.cvds.taskManager.model.TaskMongo;
+import edu.eci.cvds.taskManager.model.TaskPostgres;
 import edu.eci.cvds.taskManager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
