@@ -21,13 +21,12 @@ public class TaskController {
     private TaskService taskService;
 
 
-
     /**
      * Retrieves all tasks.
      *
      * @return A list of all tasks.
      */
-    @GetMapping
+    @GetMapping("/{user}")
     public List<TaskMongo> getAllTasks() {
         return taskService.findAll();
     }
@@ -38,7 +37,7 @@ public class TaskController {
      * @param task The Task object to be created.
      * @return The created Task object.
      */
-    @PostMapping
+    @PostMapping("/{user}")
     public Task createTask(@RequestBody Task task)  {
         return taskService.save(task);
     }
@@ -49,7 +48,7 @@ public class TaskController {
      * @param id The ID of the task to be marked as completed.
      * @return ResponseEntity containing the updated Task object.
      */
-    @PutMapping("/{id}/complete")
+    @PutMapping("/{user}/{id}/complete")
     public ResponseEntity<Task> completeTask(@PathVariable String id) {
         Task updatedTask = taskService.markAsCompleted(id);
         return ResponseEntity.ok(updatedTask);
@@ -61,18 +60,31 @@ public class TaskController {
      * @param id The ID of the task to be deleted.
      * @return ResponseEntity indicating the outcome of the operation.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{user}/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable String id)  {
         taskService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     /**
+     * Deletes all tasks.
+     */
+    @DeleteMapping("/{user}")
+    public ResponseEntity<Void> deleteAllTasks()  {
+        taskService.deleteAllByUserId();
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Deletes tasks
+     */
+
+    /**
      * Generate a list of random tasks.
      *
      * @return a list of randomly generated tasks.
      */
-    @PostMapping("/task/randomTasks")
+    @PostMapping("/{user}/task/randomTasks")
     public List<Task> generateRandomTasks() {
         return taskService.generateRandomTasks();
     }

@@ -7,17 +7,22 @@ import edu.eci.cvds.taskManager.model.TaskPostgres;
 import edu.eci.cvds.taskManager.repositories.mongo.TaskMongoRepository;
 import edu.eci.cvds.taskManager.repositories.UserRepository;
 import edu.eci.cvds.taskManager.repositories.postgres.TaskPostgresRepository;
+import edu.eci.cvds.taskManager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+
 
 
 /**
@@ -27,9 +32,10 @@ import java.util.Random;
 @Service
 public class TaskService {
 
+
     private final TaskMongoRepository taskMongoRepository;
 
-    private final UserRepository userRepository;
+    private static UserRepository userRepository;
     private final TaskPostgresRepository taskPostgresRepository;
 
     @Autowired
@@ -37,6 +43,7 @@ public class TaskService {
         this.taskMongoRepository = taskMongoRepository;
         this.taskPostgresRepository = taskPostgresRepository;
         this.userRepository = NewUserRepository;
+
     }
 
     /**
@@ -69,23 +76,6 @@ public class TaskService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
-    /**
-     * Attempts to log in a user with the provided username and password.
-     *
-     * @param username The username of the user.
-     * @param password The password of the user.
-     * @return The authenticated User object.
-     * @throws RuntimeException if authentication fails.
-     */
-    public User login(String username, String password) {
-        Optional<User> user = userRepository.findByUsername(username);
-
-        if (((Optional<?>) user).isPresent() && user.get().getPassword().equals(password)) {
-            return user.get(); 
-        } else {
-            throw new RuntimeException("Invalid username or password");
-        }
-    }
 
     /**
      * Saves a new task or updates an existing task in both MongoDB and Postgres repositories.
@@ -118,6 +108,20 @@ public class TaskService {
             throw new RuntimeException(e);
         }
         taskMongoRepository.deleteById(id);
+    }
+
+    /**
+     * Deletes all tasks associated with the authenticated user from both MongoDB and Postgres repositories.
+     */
+    public void deleteAllByUserId()  {
+        User authenticatedUser = getAuthenticatedUser();
+        String userID = authenticatedUser.getId();
+        try {
+            taskPostgresRepository.deleteAllByUserId(userID);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        taskMongoRepository.deleteAllByUserId(userID);
     }
 
     /**
@@ -169,5 +173,49 @@ public class TaskService {
         }
         return tasks;
     }
+
+    /**
+     * Attempts to authenticate a user by their username and password.
+     * If the username exists and the password matches the stored encoded password,
+     * the authenticated user is returned. Otherwise, an empty Optional is returned.
+     *
+     * @param username the username of the user trying to log in
+     * @param password the password provided for authentication
+     * @return an Optional containing the authenticated user if successful, otherwise empty
+     */
+    public static Optional<User> loginUser(String username, String password) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+
+        if (!optionalUser.isPresent()) {
+            return Optional.empty();
+        }
+
+        User user = optionalUser.get();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            return Optional.of(user);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<User> registerUser(String username, String password) {
+        try {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(password);
+
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(encodedPassword);
+
+            User savedUser = userRepository.save(user); // Guardar el usuario en la base de datos
+            return Optional.of(savedUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
 
 }
