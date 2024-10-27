@@ -2,6 +2,7 @@ package edu.eci.cvds.taskManager.repositories.postgres;
 
 import edu.eci.cvds.taskManager.databasePostgres.DatabaseConnectionPostgres;
 import edu.eci.cvds.taskManager.model.TaskPostgres;
+import edu.eci.cvds.taskManager.model.User;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -34,7 +35,7 @@ public class TaskPostgresRepository {
         String sql = "INSERT INTO tasks (id, description, completed, difficulty_level, priority, average_development_time, user_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) " +
                 "ON CONFLICT (id) DO UPDATE SET description = EXCLUDED.description, completed = EXCLUDED.completed, " +
-                "difficulty_level = EXCLUDED.difficulty_level, priority = EXCLUDED.priority, average_development_time = EXCLUDED.average_development_time, user_id = EXCLUDED.user_id";
+                "difficulty_level = EXCLUDED.difficulty_level, priority = EXCLUDED.priority, average_development_time = EXCLUDED.average_development_time";
 
         try (Connection connection = DatabaseConnectionPostgres.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -134,32 +135,52 @@ public class TaskPostgresRepository {
         }
     }
 
+
+
+
     /**
-     * Retrieves the user ID based on the username.
+     * Saves a user to the database.
      *
-     * @param username the username of the user
-     * @return the user ID if found, otherwise null
+     * @param user the {@link User} object to be saved
      * @throws SQLException if a database access error occurs
      */
-    public Optional<String> findUserIdByUsername(String username) {
-        String userId = null;
-        String sql = "SELECT id FROM users WHERE username = ?";
+    public void saveUser(User user) throws SQLException {
+        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+
+        try (Connection connection = DatabaseConnectionPostgres.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.executeUpdate();
+        }
+    }
+
+    /**
+     * Busca un usuario en la base de datos usando el nombre de usuario.
+     *
+     * @param username el nombre de usuario a buscar.
+     * @return un Optional con el usuario si se encuentra, de lo contrario, un Optional vacío.
+     */
+    public Optional<User> findByUsername(String username) {
+        String sql = "SELECT * FROM users WHERE username = ?";
 
         try (Connection connection = DatabaseConnectionPostgres.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
 
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    userId = resultSet.getString("id");
-                }
+            if (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getString("id"));
+                user.setUsername(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password"));
+                return Optional.of(user);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error retrieving user ID from database", e);
+            e.printStackTrace();
         }
-        return Optional.ofNullable(userId);
+
+        return Optional.empty();
     }
-
-
 }
