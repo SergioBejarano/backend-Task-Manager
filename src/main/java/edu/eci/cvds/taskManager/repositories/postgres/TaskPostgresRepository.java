@@ -160,6 +160,4 @@ public class TaskPostgresRepository {
         }
         return Optional.ofNullable(userId);
     }
-
-
 }

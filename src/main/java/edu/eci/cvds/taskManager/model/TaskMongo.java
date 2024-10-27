@@ -32,6 +32,7 @@ public class TaskMongo extends Task {
     public TaskMongo(Task task) {
         super(task.getId(), task.getDescription(), task.isCompleted(), task.getDifficultyLevel(), task.getPriority(), task.getAverageDevelopmentTime());
         this.id = task.getId();
+        this.userId = task.getUserId();
     }
 
     /**

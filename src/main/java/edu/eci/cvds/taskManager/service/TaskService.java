@@ -69,7 +69,7 @@ public class TaskService {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof UserDetails) {
-            String username = "sergioBejarano";
+            String username = ((UserDetails) principal).getUsername();
             return taskPostgresRepository.findUserIdByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         } else if (principal instanceof String username) {
@@ -88,9 +88,9 @@ public class TaskService {
      * @param task The Task object to be saved.
      * @return The saved Task object.
      */
-    public Task save(Task task)  {
-        task.setUserId(getAuthenticatedUser());
-
+    public Task save(Task task, String username)  {
+        task.setUserId(taskPostgresRepository.findUserIdByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username)));
         TaskMongo taskMongo = new TaskMongo(task);
         TaskPostgres taskPostgres = new TaskPostgres(task);
         try {
@@ -157,7 +157,7 @@ public class TaskService {
      *
      * @return a list of randomly generated tasks.
      */
-    public List<Task> generateRandomTasks() {
+    public List<Task> generateRandomTasks(String username) {
         Random random = new Random();
         int numTasks = random.nextInt(901) + 100; // Genera entre 100 y 1000 tasks
         List<Task> tasks = new ArrayList<>();
@@ -172,7 +172,7 @@ public class TaskService {
             task.setDifficultyLevel(difficultyLevels.get(random.nextInt(difficultyLevels.size())));
             task.setAverageDevelopmentTime(Math.abs(random.nextInt()));
 
-            this.save(task);
+            this.save(task, username);
             tasks.add(task);
         }
         return tasks;
@@ -220,6 +220,4 @@ public class TaskService {
             return Optional.empty();
         }
     }
-
-
 }

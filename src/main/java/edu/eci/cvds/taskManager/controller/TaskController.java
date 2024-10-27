@@ -39,9 +39,9 @@ public class TaskController {
      * @param task The Task object to be created.
      * @return The created Task object.
      */
-    @PostMapping()
-    public Task createTask(@RequestBody Task task)  {
-        return taskService.save(task);
+    @PostMapping("/{userName}")
+    public Task createTask(@RequestBody Task task, @PathVariable String userName)  {
+        return taskService.save(task, userName);
     }
 
     /**
@@ -86,9 +86,9 @@ public class TaskController {
      *
      * @return a list of randomly generated tasks.
      */
-    @PostMapping("/task/randomTasks")
-    public List<Task> generateRandomTasks() {
-        return taskService.generateRandomTasks();
+    @PostMapping("/{userName}/task/randomTasks")
+    public List<Task> generateRandomTasks(@PathVariable String userName) {
+        return taskService.generateRandomTasks(userName);
     }
 
     /**
