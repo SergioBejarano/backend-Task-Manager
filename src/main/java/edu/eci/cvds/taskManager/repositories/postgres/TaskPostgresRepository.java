@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -33,7 +34,7 @@ public class TaskPostgresRepository {
         String sql = "INSERT INTO tasks (id, description, completed, difficulty_level, priority, average_development_time, user_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) " +
                 "ON CONFLICT (id) DO UPDATE SET description = EXCLUDED.description, completed = EXCLUDED.completed, " +
-                "difficulty_level = EXCLUDED.difficulty_level, priority = EXCLUDED.priority, average_development_time = EXCLUDED.average_development_time";
+                "difficulty_level = EXCLUDED.difficulty_level, priority = EXCLUDED.priority, average_development_time = EXCLUDED.average_development_time, user_id = EXCLUDED.user_id";
 
         try (Connection connection = DatabaseConnectionPostgres.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -134,38 +135,31 @@ public class TaskPostgresRepository {
     }
 
     /**
-     * Retrieves all tasks for a specific user from the database.
+     * Retrieves the user ID based on the username.
      *
-     * @param nameUser the username of the user whose tasks are to be retrieved
-     * @return a list of {@link TaskPostgres} objects for the specified user
+     * @param username the username of the user
+     * @return the user ID if found, otherwise null
      * @throws SQLException if a database access error occurs
      */
-    public List<TaskPostgres> findAllByUser(String nameUser) throws SQLException {
-        List<TaskPostgres> tasks = new ArrayList<>();
-        String sql = "SELECT t.id, t.description, t.completed, t.difficulty_level, t.priority, " +
-                "t.average_development_time, t.user_id FROM tasks t " +
-                "JOIN users u ON t.user_id = u.id " +
-                "WHERE u.username = ?";
+    public Optional<String> findUserIdByUsername(String username) {
+        String userId = null;
+        String sql = "SELECT id FROM users WHERE username = ?";
 
         try (Connection connection = DatabaseConnectionPostgres.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, nameUser);
+            statement.setString(1, username);
 
             try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    TaskPostgres task = new TaskPostgres();
-                    task.setId(resultSet.getString("id"));
-                    task.setDescription(resultSet.getString("description"));
-                    task.setCompleted(resultSet.getBoolean("completed"));
-                    task.setDifficultyLevel(resultSet.getString("difficulty_level"));
-                    task.setPriority(resultSet.getInt("priority"));
-                    task.setAverageDevelopmentTime(resultSet.getInt("average_development_time"));
-                    task.setUserId(resultSet.getString("user_id"));
-                    tasks.add(task);
+                if (resultSet.next()) {
+                    userId = resultSet.getString("id");
                 }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving user ID from database", e);
         }
-        return tasks;
+        return Optional.ofNullable(userId);
     }
+
+
 }
