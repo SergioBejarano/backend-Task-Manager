@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -33,7 +34,7 @@ public class TaskPostgresRepository {
         String sql = "INSERT INTO tasks (id, description, completed, difficulty_level, priority, average_development_time, user_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) " +
                 "ON CONFLICT (id) DO UPDATE SET description = EXCLUDED.description, completed = EXCLUDED.completed, " +
-                "difficulty_level = EXCLUDED.difficulty_level, priority = EXCLUDED.priority, average_development_time = EXCLUDED.average_development_time";
+                "difficulty_level = EXCLUDED.difficulty_level, priority = EXCLUDED.priority, average_development_time = EXCLUDED.average_development_time, user_id = EXCLUDED.user_id";
 
         try (Connection connection = DatabaseConnectionPostgres.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -132,4 +133,33 @@ public class TaskPostgresRepository {
             statement.executeUpdate();
         }
     }
+
+    /**
+     * Retrieves the user ID based on the username.
+     *
+     * @param username the username of the user
+     * @return the user ID if found, otherwise null
+     * @throws SQLException if a database access error occurs
+     */
+    public Optional<String> findUserIdByUsername(String username) {
+        String userId = null;
+        String sql = "SELECT id FROM users WHERE username = ?";
+
+        try (Connection connection = DatabaseConnectionPostgres.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, username);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    userId = resultSet.getString("id");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving user ID from database", e);
+        }
+        return Optional.ofNullable(userId);
+    }
+
+
 }
