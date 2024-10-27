@@ -2,6 +2,7 @@ package edu.eci.cvds.taskManager.repositories.postgres;
 
 import edu.eci.cvds.taskManager.databasePostgres.DatabaseConnectionPostgres;
 import edu.eci.cvds.taskManager.model.TaskPostgres;
+import edu.eci.cvds.taskManager.model.User;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -161,5 +162,50 @@ public class TaskPostgresRepository {
         return Optional.ofNullable(userId);
     }
 
+    /**
+     * Saves a user to the database.
+     *
+     * @param user the {@link User} object to be saved
+     * @throws SQLException if a database access error occurs
+     */
+    public void saveUser(User user) throws SQLException {
+        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
 
+        try (Connection connection = DatabaseConnectionPostgres.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.executeUpdate();
+        }
+    }
+
+
+    /**
+     * Busca un usuario en la base de datos usando el nombre de usuario.
+     *
+     * @param username el nombre de usuario a buscar.
+     * @return un Optional con el usuario si se encuentra, de lo contrario, un Optional vacío.
+     */
+    public Optional<User> findByUsername(String username) {
+        String sql = "SELECT * FROM users WHERE username = ?";
+
+        try (Connection connection = DatabaseConnectionPostgres.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getString("id"));
+                user.setUsername(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password"));
+                return Optional.of(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
+    }
 }

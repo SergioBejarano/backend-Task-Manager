@@ -43,6 +43,7 @@ public class TaskService {
         this.userRepository = NewUserRepository;
 
     }
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
     /**
@@ -178,33 +179,23 @@ public class TaskService {
         return tasks;
     }
 
-    /**
-     * Attempts to authenticate a user by their username and password.
-     * If the username exists and the password matches the stored encoded password,
-     * the authenticated user is returned. Otherwise, an empty Optional is returned.
-     *
-     * @param username the username of the user trying to log in
-     * @param password the password provided for authentication
-     * @return an Optional containing the authenticated user if successful, otherwise empty
-     */
-    public static Optional<User> loginUser(String username, String password) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-
-        if (!optionalUser.isPresent()) {
-            return Optional.empty();
-        }
-
-        User user = optionalUser.get();
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            return Optional.of(user);
+    public Optional<User> loginUser(String username, String password) {
+        Optional<User> userOptional = taskPostgresRepository.findByUsername(username);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                return Optional.of(user);
+            } else {
+                System.out.println("Contraseña incorrecta");
+            }
         } else {
-            return Optional.empty();
+            System.out.println("Usuario no encontrado");
         }
+        return Optional.empty();
     }
 
-    public static Optional<User> registerUser(String username, String password) {
+
+    public Optional<User> registerUser(String username, String password) {
         try {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(password);
@@ -213,13 +204,12 @@ public class TaskService {
             user.setUsername(username);
             user.setPassword(encodedPassword);
 
-            User savedUser = userRepository.save(user); // Guardar el usuario en la base de datos
-            return Optional.of(savedUser);
-        } catch (Exception e) {
+            taskPostgresRepository.saveUser(user);
+            return Optional.of(user);
+        } catch (SQLException e) {
             e.printStackTrace();
             return Optional.empty();
         }
     }
-
 
 }
