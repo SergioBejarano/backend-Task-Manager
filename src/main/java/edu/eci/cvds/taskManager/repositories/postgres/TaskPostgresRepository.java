@@ -50,25 +50,36 @@ public class TaskPostgresRepository {
 
 
     /**
-     * Retrieves all tasks from the database.
+     * Retrieves all tasks for a specific user from the database.
      *
-     * @return a list of {@link TaskPostgres} objects
+     * @param nameUser the username of the user whose tasks are to be retrieved
+     * @return a list of {@link TaskPostgres} objects for the specified user
      * @throws SQLException if a database access error occurs
      */
-    public List<TaskPostgres> findAll() throws SQLException {
+    public List<TaskPostgres> findAllByUser(String nameUser) throws SQLException {
         List<TaskPostgres> tasks = new ArrayList<>();
-        String sql = "SELECT * FROM tasks";
+        String sql = "SELECT t.id, t.description, t.completed, t.difficulty_level, t.priority, " +
+                "t.average_development_time, t.user_id FROM tasks t " +
+                "JOIN users u ON t.user_id = u.id " +
+                "WHERE u.username = ?";
 
         try (Connection connection = DatabaseConnectionPostgres.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            while (resultSet.next()) {
-                TaskPostgres task = new TaskPostgres();
-                task.setId(resultSet.getString("id"));
-                task.setDescription(resultSet.getString("description"));
-                task.setCompleted(resultSet.getBoolean("completed"));
-                tasks.add(task);
+            statement.setString(1, nameUser);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    TaskPostgres task = new TaskPostgres();
+                    task.setId(resultSet.getString("id"));
+                    task.setDescription(resultSet.getString("description"));
+                    task.setCompleted(resultSet.getBoolean("completed"));
+                    task.setDifficultyLevel(resultSet.getString("difficulty_level"));
+                    task.setPriority(resultSet.getInt("priority"));
+                    task.setAverageDevelopmentTime(resultSet.getInt("average_development_time"));
+                    task.setUserId(resultSet.getString("user_id"));
+                    tasks.add(task);
+                }
             }
         }
         return tasks;

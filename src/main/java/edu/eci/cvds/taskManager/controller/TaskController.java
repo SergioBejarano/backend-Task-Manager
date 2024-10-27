@@ -28,9 +28,9 @@ public class TaskController {
      *
      * @return A list of all tasks.
      */
-    @GetMapping("/{user}")
-    public List<TaskMongo> getAllTasks() {
-        return taskService.findAll();
+    @GetMapping("/{userName}")
+    public List<TaskPostgres> getAllTasks(@PathVariable String userName) {
+        return taskService.findAll(userName);
     }
 
     /**
@@ -96,9 +96,9 @@ public class TaskController {
      *
      * @return A ResponseEntity containing a list of tasks in JSON format.
      */
-    @GetMapping("/{user}/fetchTasks")
-    public ResponseEntity<List<TaskPostgres>> fetchTasks() throws SQLException {
-        List<TaskPostgres> tasks = taskService.findAllTasksFromPostgres();
+    @GetMapping("/{userName}/fetchTasks")
+    public ResponseEntity<List<TaskPostgres>> fetchTasks(@PathVariable String userName) throws SQLException {
+        List<TaskPostgres> tasks = taskService.findAll(userName);
         return ResponseEntity.ok(tasks);
     }
 }
