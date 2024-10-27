@@ -30,6 +30,8 @@ public class TaskPostgres extends Task {
     @Column(name = "average_development_time")
     private int averageDevelopmentTime;
 
+    @Column(name = "user_id")
+    private String userId;
 
     /**
      * Default constructor for TaskPostgres.
@@ -46,6 +48,7 @@ public class TaskPostgres extends Task {
     public TaskPostgres(Task task) {
         super(task.getId(), task.getDescription(), task.isCompleted(), task.getDifficultyLevel(), task.getPriority(), task.getAverageDevelopmentTime());
         this.id = task.getId();
+        this.userId = task.getUserId();
         this.description = task.getDescription();
         this.completed = task.isCompleted();
         this.difficultyLevel = task.getDifficultyLevel();
@@ -71,5 +74,20 @@ public class TaskPostgres extends Task {
     @Override
     public String getId() {
         return id;
+    }
+
+    /**
+     * Sets the unique ID of the task.
+     *
+     * @param id The ID to set for the task.
+     */
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getUserId(){
+        return userId;
     }
 }

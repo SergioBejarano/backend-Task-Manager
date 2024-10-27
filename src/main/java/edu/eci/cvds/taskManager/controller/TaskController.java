@@ -2,11 +2,13 @@ package edu.eci.cvds.taskManager.controller;
 
 import edu.eci.cvds.taskManager.model.Task;
 import edu.eci.cvds.taskManager.model.TaskMongo;
+import edu.eci.cvds.taskManager.model.TaskPostgres;
 import edu.eci.cvds.taskManager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -26,9 +28,9 @@ public class TaskController {
      *
      * @return A list of all tasks.
      */
-    @GetMapping("/{user}")
-    public List<TaskMongo> getAllTasks() {
-        return taskService.findAll();
+    @GetMapping("/{userName}")
+    public List<TaskPostgres> getAllTasks(@PathVariable String userName) {
+        return taskService.findAll(userName);
     }
 
     /**
@@ -87,5 +89,16 @@ public class TaskController {
     @PostMapping("/{user}/task/randomTasks")
     public List<Task> generateRandomTasks() {
         return taskService.generateRandomTasks();
+    }
+
+    /**
+     * Fetches tasks for the frontend from PostgreSQL.
+     *
+     * @return A ResponseEntity containing a list of tasks in JSON format.
+     */
+    @GetMapping("/{userName}/fetchTasks")
+    public ResponseEntity<List<TaskPostgres>> fetchTasks(@PathVariable String userName) throws SQLException {
+        List<TaskPostgres> tasks = taskService.findAll(userName);
+        return ResponseEntity.ok(tasks);
     }
 }

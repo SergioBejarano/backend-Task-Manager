@@ -372,6 +372,46 @@ La clase `SecurityConfig` para configurar la seguridad de la aplicación.
 
 Y la clase `UserDetailsServiceImpl` que implementa `UserDetailsService` y proporciona la lógica para cargar los datos de usuario para la autenticación.
 
+
+### Roles en TaskManager
+
+Se definen los siguientes roles en la aplicación:
+
+Usuario: Administración de tareas.
+
+Administrador: Acceso a gráficas.
+
+
+Posteriomente, se crea la tabla correspondiente a los roles en la base de datos relacional:
+
+```sh
+CREATE TABLE roles (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+```
+
+Se registran los roles:
+
+```sh
+INSERT INTO roles (name) VALUES ('USER'), ('ADMIN');
+```
+
+Se actualiza la tabla `users`:
+
+```sh
+ALTER TABLE users ADD COLUMN role_id INTEGER REFERENCES roles(id);
+```
+
+Y se asignan de la siguiente manera a ciertos usuarios sus roles respectivos:
+
+```sh
+UPDATE users SET role_id = (SELECT id FROM roles WHERE name = 'USER') WHERE username = 'juanMedina';
+UPDATE users SET role_id = (SELECT id FROM roles WHERE name = 'USER') WHERE username = 'haiderRodriguez';
+UPDATE users SET role_id = (SELECT id FROM roles WHERE name = 'ADMIN') WHERE username = 'lauraRodriguez';
+```
+
+
 ### Generación de certificado autofirmado
 
 Con el siguiente comando se crea el formato de almacén de claves PKCS12:

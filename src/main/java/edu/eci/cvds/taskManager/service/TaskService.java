@@ -7,14 +7,11 @@ import edu.eci.cvds.taskManager.model.TaskPostgres;
 import edu.eci.cvds.taskManager.repositories.mongo.TaskMongoRepository;
 import edu.eci.cvds.taskManager.repositories.UserRepository;
 import edu.eci.cvds.taskManager.repositories.postgres.TaskPostgresRepository;
-import edu.eci.cvds.taskManager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 
 
 import java.sql.SQLException;
@@ -22,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 
@@ -46,35 +44,42 @@ public class TaskService {
 
     }
 
+
     /**
      * Retrieves all tasks from both MongoDB and Postgres repositories.
      *
      * @return A list of all tasks from both databases.
      */
-    public List<TaskMongo> findAll() {
-        User authenticatedUser = getAuthenticatedUser();
-        String userID = authenticatedUser.getId();
-        List<TaskMongo> tasksMongo = taskMongoRepository.findAll();
-        List<TaskMongo> filteredTasks = new ArrayList<>();
-        for (TaskMongo task : tasksMongo) {
-            if (task.getUserId().equals(userID)) {
-                filteredTasks.add(task);
-            }
+    public List<TaskPostgres> findAll(String nameUser) {
+        try {
+            return taskPostgresRepository.findAllByUser(nameUser);
+        } catch (SQLException e) {
+            System.err.println("Error retrieving tasks for user: " + nameUser);
+            e.printStackTrace();
+            return new ArrayList<>();
         }
-        return filteredTasks;
-
     }
 
     /**
-     * Retrieves the currently authenticated user from the security context.
+     * Retrieves the currently authenticated user's ID from the security context.
      *
-     * @return The authenticated User object.
+     * @return The authenticated user's ID.
      */
-    private User getAuthenticatedUser() {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    private String getAuthenticatedUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            String username = "sergioBejarano";
+            return taskPostgresRepository.findUserIdByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        } else if (principal instanceof String username) {
+            return taskPostgresRepository.findUserIdByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        } else {
+            throw new UsernameNotFoundException("User not authenticated");
+        }
     }
+
 
 
     /**
@@ -84,8 +89,8 @@ public class TaskService {
      * @return The saved Task object.
      */
     public Task save(Task task)  {
-        User authenticatedUser = getAuthenticatedUser();
-        task.setUserId(authenticatedUser.getId());
+        task.setUserId(getAuthenticatedUser());
+
         TaskMongo taskMongo = new TaskMongo(task);
         TaskPostgres taskPostgres = new TaskPostgres(task);
         try {
@@ -114,8 +119,7 @@ public class TaskService {
      * Deletes all tasks associated with the authenticated user from both MongoDB and Postgres repositories.
      */
     public void deleteAllByUserId()  {
-        User authenticatedUser = getAuthenticatedUser();
-        String userID = authenticatedUser.getId();
+        String userID = getAuthenticatedUser();
         try {
             taskPostgresRepository.deleteAllByUserId(userID);
         } catch (SQLException e) {
