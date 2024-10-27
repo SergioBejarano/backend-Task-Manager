@@ -44,7 +44,7 @@ public class TaskServiceTest {
     public void testSaveTaskSuccessWithOneTaskRegistered() {
         when(taskMongoRepository.save(any(TaskMongo.class))).thenReturn(taskMongo);
 
-        Task result = taskService.save(task);
+        Task result = taskService.save("lauraRodriguez",task);
 
         assertNotNull(result);
         assertEquals(task.getId(), result.getId());
@@ -67,7 +67,7 @@ public class TaskServiceTest {
 
         doNothing().when(taskPostgresRepository).save(any(TaskPostgres.class));
 
-        Task result = taskService.save(task);
+        Task result = taskService.save("lauraRodriguez",task);
 
         assertNotNull(result);
         assertEquals(task.getId(), result.getId());
