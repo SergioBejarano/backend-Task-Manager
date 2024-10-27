@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -88,5 +89,16 @@ public class TaskController {
     @PostMapping("/task/randomTasks")
     public List<Task> generateRandomTasks() {
         return taskService.generateRandomTasks();
+    }
+
+    /**
+     * Fetches tasks for the frontend from PostgreSQL.
+     *
+     * @return A ResponseEntity containing a list of tasks in JSON format.
+     */
+    @GetMapping("/{userName}/fetchTasks")
+    public ResponseEntity<List<TaskPostgres>> fetchTasks(@PathVariable String userName) throws SQLException {
+        List<TaskPostgres> tasks = taskService.findAll(userName);
+        return ResponseEntity.ok(tasks);
     }
 }

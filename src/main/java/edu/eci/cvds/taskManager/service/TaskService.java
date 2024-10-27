@@ -7,14 +7,11 @@ import edu.eci.cvds.taskManager.model.TaskPostgres;
 import edu.eci.cvds.taskManager.repositories.mongo.TaskMongoRepository;
 import edu.eci.cvds.taskManager.repositories.UserRepository;
 import edu.eci.cvds.taskManager.repositories.postgres.TaskPostgresRepository;
-import edu.eci.cvds.taskManager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 
 
 import java.sql.SQLException;
@@ -22,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 
@@ -46,6 +44,7 @@ public class TaskService {
 
     }
 
+
     /**
      * Retrieves all tasks from both MongoDB and Postgres repositories.
      *
@@ -67,9 +66,20 @@ public class TaskService {
      * @return The authenticated User object.
      */
     private User getAuthenticatedUser() {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            System.out.println(username);
+            return userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        } else if (principal instanceof String) {
+            String username = (String) principal;
+            return userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        } else {
+            throw new UsernameNotFoundException("User not authenticated");
+        }
     }
 
 
