@@ -40,8 +40,8 @@ public class TaskController {
      * @return The created Task object.
      */
     @PostMapping("/{user}")
-    public Task createTask(@RequestBody Task task)  {
-        return taskService.save(task);
+    public Task createTask(@PathVariable String user, @RequestBody Task task)  {
+        return taskService.save(user, task);
     }
 
     /**
@@ -72,8 +72,8 @@ public class TaskController {
      * Deletes all tasks.
      */
     @DeleteMapping("/{user}")
-    public ResponseEntity<Void> deleteAllTasks()  {
-        taskService.deleteAllByUserId();
+    public ResponseEntity<Void> deleteAllTasks(@PathVariable String user)  {
+        taskService.deleteAllByUserId(user);
         return ResponseEntity.noContent().build();
     }
 

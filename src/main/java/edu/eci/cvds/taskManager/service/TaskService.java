@@ -65,19 +65,11 @@ public class TaskService {
      *
      * @return The authenticated user's ID.
      */
-    private String getAuthenticatedUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    private String getAuthenticatedUser(String username) {
 
-        if (principal instanceof UserDetails) {
-            String username = "sergioBejarano";
-            return taskPostgresRepository.findUserIdByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        } else if (principal instanceof String username) {
-            return taskPostgresRepository.findUserIdByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        } else {
-            throw new UsernameNotFoundException("User not authenticated");
-        }
+        return taskPostgresRepository.findUserIdByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
     }
 
 
@@ -88,8 +80,8 @@ public class TaskService {
      * @param task The Task object to be saved.
      * @return The saved Task object.
      */
-    public Task save(Task task)  {
-        task.setUserId(getAuthenticatedUser());
+    public Task save(String userName, Task task)  {
+        task.setUserId(getAuthenticatedUser(userName));
 
         TaskMongo taskMongo = new TaskMongo(task);
         TaskPostgres taskPostgres = new TaskPostgres(task);
@@ -118,8 +110,8 @@ public class TaskService {
     /**
      * Deletes all tasks associated with the authenticated user from both MongoDB and Postgres repositories.
      */
-    public void deleteAllByUserId()  {
-        String userID = getAuthenticatedUser();
+    public void deleteAllByUserId(String userName)  {
+        String userID = getAuthenticatedUser(userName);
         try {
             taskPostgresRepository.deleteAllByUserId(userID);
         } catch (SQLException e) {
@@ -172,7 +164,7 @@ public class TaskService {
             task.setDifficultyLevel(difficultyLevels.get(random.nextInt(difficultyLevels.size())));
             task.setAverageDevelopmentTime(Math.abs(random.nextInt()));
 
-            this.save(task);
+            this.save("sergioBejarano",task);
             tasks.add(task);
         }
         return tasks;
