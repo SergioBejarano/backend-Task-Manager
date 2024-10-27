@@ -72,4 +72,14 @@ public class TaskPostgres extends Task {
     public String getId() {
         return id;
     }
+
+    /**
+     * Sets the unique ID of the task.
+     *
+     * @param id The ID to set for the task.
+     */
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
 }
