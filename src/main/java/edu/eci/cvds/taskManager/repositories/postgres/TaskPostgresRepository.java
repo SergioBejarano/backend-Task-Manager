@@ -169,14 +169,42 @@ public class TaskPostgresRepository {
      * @throws SQLException if a database access error occurs
      */
     public void saveUser(User user) throws SQLException {
-        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        String sql = "INSERT INTO users (username, password, role_id) VALUES (?, ?, ?)";
 
         try (Connection connection = DatabaseConnectionPostgres.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
+            statement.setString(3, user.getRoleId());
+
             statement.executeUpdate();
         }
+    }
+
+    /**
+     * Retrieves the role_id based on the username.
+     *
+     * @param username the username of the user
+     * @throws SQLException if a database access error occurs
+     */
+    public Optional<String> findRoleId(String username) {
+        String roleId = null;
+        String sql = "SELECT role_id FROM users WHERE username = ?";
+
+        try (Connection connection = DatabaseConnectionPostgres.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, username);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    roleId = resultSet.getString("role_id");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving role id from database", e);
+        }
+        return Optional.of(roleId);
     }
 
 
@@ -200,6 +228,7 @@ public class TaskPostgresRepository {
                 user.setId(resultSet.getString("id"));
                 user.setUsername(resultSet.getString("username"));
                 user.setPassword(resultSet.getString("password"));
+                user.setRoleId(resultSet.getString("role_id"));
                 return Optional.of(user);
             }
         } catch (SQLException e) {

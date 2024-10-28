@@ -50,12 +50,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register").permitAll()
-                        .requestMatchers("/api/tasks/**").authenticated() // Requiere autenticación para /api/tasks/**
+                        .requestMatchers("/auth/login", "/auth/register", "/api/tasks/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(withDefaults());
-
-
         return http.build();
     }
 
@@ -74,4 +71,5 @@ public class SecurityConfig {
         return connector;
     }
     **/
+
 }

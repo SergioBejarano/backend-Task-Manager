@@ -23,7 +23,7 @@ public class TaskPostgres extends Task {
 
     @Column(name = "difficulty_level")
     private String difficultyLevel;
-    
+
     @Column(name = "priority")
     private int priority;
 
@@ -55,7 +55,7 @@ public class TaskPostgres extends Task {
         this.priority = task.getPriority();
         this.averageDevelopmentTime = task.getAverageDevelopmentTime();
     }
-    
+
 
     /**
      * Constructor for TaskPostgres with a description.

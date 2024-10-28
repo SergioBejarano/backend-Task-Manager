@@ -11,6 +11,7 @@ public class User {
     private String id;  // MongoDB usará este campo como el identificador único del documento
     private String username;
     private String password;
+    private String roleId;
 
     // Constructor vacío (requerido por algunas bibliotecas de serialización)
     public User() {}
@@ -38,13 +39,19 @@ public class User {
         this.username = username;
     }
 
-
     public String getPassword() {
-
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 }
