@@ -21,21 +21,26 @@ import java.util.Optional;
 import java.util.Random;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
-
 /**
- * The TaskService class provides business logic for managing tasks.
- * It interacts with the Mongo and Postgres repositories to perform CRUD operations on tasks.
+ * The {@code TaskService} class provides business logic for managing tasks within the application.
+ * It handles operations related to tasks, including creating, updating, deleting, and retrieving tasks,
+ * as well as user authentication and registration.
  */
 @Service
 public class TaskService {
 
-
     private final TaskMongoRepository taskMongoRepository;
-
     private static UserRepository userRepository;
     private final TaskPostgresRepository taskPostgresRepository;
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    /**
+     * Constructor to inject dependencies for TaskMongoRepository, TaskPostgresRepository, and UserRepository.
+     *
+     * @param taskMongoRepository the repository for MongoDB tasks
+     * @param taskPostgresRepository the repository for PostgreSQL tasks
+     * @param NewUserRepository the user repository for handling user data
+     */
     @Autowired
     public TaskService(TaskMongoRepository taskMongoRepository, TaskPostgresRepository taskPostgresRepository,UserRepository NewUserRepository) {
         this.taskMongoRepository = taskMongoRepository;
@@ -43,13 +48,12 @@ public class TaskService {
         this.userRepository = NewUserRepository;
 
     }
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
 
     /**
-     * Retrieves all tasks from both MongoDB and Postgres repositories.
+     * Retrieves all tasks associated with a specific user.
      *
-     * @return A list of all tasks from both databases.
+     * @param nameUser the username of the user
+     * @return a list of TaskPostgres objects associated with the specified user
      */
     public List<TaskPostgres> findAll(String nameUser) {
         try {
@@ -62,24 +66,23 @@ public class TaskService {
     }
 
     /**
-     * Retrieves the currently authenticated user's ID from the security context.
+     * Retrieves the authenticated user's ID by username.
      *
-     * @return The authenticated user's ID.
+     * @param username the username of the user
+     * @return the user ID associated with the specified username
+     * @throws UsernameNotFoundException if the user is not found
      */
     private String getAuthenticatedUser(String username) {
-
         return taskPostgresRepository.findUserIdByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
     }
 
-
-
     /**
-     * Saves a new task or updates an existing task in both MongoDB and Postgres repositories.
+     * Saves a task associated with the authenticated user.
      *
-     * @param task The Task object to be saved.
-     * @return The saved Task object.
+     * @param userName the username of the user
+     * @param task the task object to be saved
+     * @return the saved Task object
      */
     public Task save(String userName, Task task)  {
         task.setUserId(getAuthenticatedUser(userName));
@@ -95,9 +98,9 @@ public class TaskService {
     }
 
     /**
-     * Deletes a task by its ID in both MongoDB and Postgres repositories.
+     * Deletes a task by its ID.
      *
-     * @param id The ID of the task to be deleted.
+     * @param id the ID of the task to be deleted
      */
     public void deleteById(String id)  {
         try {
@@ -109,7 +112,9 @@ public class TaskService {
     }
 
     /**
-     * Deletes all tasks associated with the authenticated user from both MongoDB and Postgres repositories.
+     * Deletes all tasks associated with a specific user.
+     *
+     * @param userName the username of the user
      */
     public void deleteAllByUserId(String userName)  {
         String userID = getAuthenticatedUser(userName);
@@ -122,10 +127,10 @@ public class TaskService {
     }
 
     /**
-     * Marks a task as completed by its ID in both MongoDB and Postgres repositories.
+     * Marks a task as completed by its ID.
      *
-     * @param id The ID of the task to be marked as completed.
-     * @return The updated Task object.
+     * @param id the ID of the task to be marked as completed
+     * @return the updated Task object
      */
     public Task markAsCompleted(String id) {
         TaskMongo taskMongo = taskMongoRepository.findById(id).orElseThrow();
@@ -139,20 +144,14 @@ public class TaskService {
     }
 
     /**
-     * Generates a list of random tasks. This method creates a random number of tasks (between 100 and 1000) and assigns random values
-     * to their various attributes. Each task is generated with the following values:
-     * - **Description**: A string indicating that the task was randomly generated along with its number.
-     * - **Completed**: A random boolean value indicating whether the task is completed or not.
-     * - **Priority**: A random integer between 0 and 5 representing the priority of the task.
-     * - **Difficulty level**: A random value from (LOW, MEDIUM, HIGH).
-     * - **Average development time**: A positive integer representing the estimated time to develop the task.
-     * Each generated task is saved using the `save()` method and added to the list of tasks.
+     * Generates a list of random tasks for a specific user and saves them.
      *
-     * @return a list of randomly generated tasks.
+     * @param userName the username of the user for whom tasks are generated
+     * @return a list of randomly generated Task objects
      */
     public List<Task> generateRandomTasks(String userName) {
         Random random = new Random();
-        int numTasks = random.nextInt(21) + 10; // Genera entre 10 y 30 tasks
+        int numTasks = random.nextInt(21) + 10;
         List<Task> tasks = new ArrayList<>();
 
         for (int i = 1; i <= numTasks; i++) {
@@ -172,18 +171,11 @@ public class TaskService {
     }
 
     /**
-     * Authenticates a user by validating the provided username and password.
+     * Authenticates a user by checking the username and password.
      *
-     * This method retrieves a user from the database using the given username.
-     * If the user is found, it compares the provided password with the stored
-     * password using a password encoder. If the passwords match, it returns
-     * an Optional containing the User object. If the user is not found or the
-     * passwords do not match, it returns an empty Optional.
-     *
-     * @param username the username of the user trying to log in
-     * @param password the password provided by the user for authentication
-     * @return an Optional<User> containing the authenticated User if the login is successful,
-     *         or an empty Optional if the user is not found or the password is incorrect
+     * @param username the username of the user
+     * @param password the password of the user
+     * @return an Optional containing the authenticated User if successful; otherwise, an empty Optional
      */
     public Optional<User> loginUser(String username, String password) {
         Optional<User> userOptional = taskPostgresRepository.findByUsername(username);
@@ -201,19 +193,12 @@ public class TaskService {
     }
 
     /**
-     * Registers a new user in the system with the specified username, password, and role ID.
+     * Registers a new user with the specified username, password, and role ID.
      *
-     * This method creates a new User object, encodes the provided password using
-     * BCrypt, and assigns the role ID to the new user. It saves the user to the
-     * database and returns an Optional containing the newly created User. If any
-     * SQLException occurs during the process, it prints the stack trace and returns
-     * an empty Optional to indicate failure.
-     *
-     * @param username the username for the new user
-     * @param password the password for the new user; this will be encoded before saving
-     * @param roleId the ID of the role assigned to the new user
-     * @return an Optional<User> containing the newly registered User if successful,
-     *         or an empty Optional if registration fails due to an SQLException
+     * @param username the desired username for the new user
+     * @param password the desired password for the new user
+     * @param roleId the role ID associated with the new user
+     * @return an Optional containing the registered User if successful; otherwise, an empty Optional
      */
     public Optional<User> registerUser(String username, String password, String roleId) {
         try {
@@ -234,10 +219,10 @@ public class TaskService {
     }
 
     /**
-     * Retrieves the role_id for a given username.
+     * Finds the role ID associated with a specified username.
      *
      * @param username the username of the user
-     * @return an Optional containing the role_id if found, empty otherwise
+     * @return an Optional containing the role ID if found; otherwise, an empty Optional
      */
     public Optional<String> findRoleId(String username) {
         return taskPostgresRepository.findRoleId(username);

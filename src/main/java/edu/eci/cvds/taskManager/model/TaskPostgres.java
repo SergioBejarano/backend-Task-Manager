@@ -41,9 +41,9 @@ public class TaskPostgres extends Task {
     }
 
     /**
-     * Constructor for Task with a task object.
+     * Constructs a TaskPostgres instance by copying properties from a Task object.
      *
-     * @param task A task object to copy data from.
+     * @param task the Task object to copy properties from
      */
     public TaskPostgres(Task task) {
         super(task.getId(), task.getDescription(), task.isCompleted(), task.getDifficultyLevel(), task.getPriority(), task.getAverageDevelopmentTime());
@@ -56,20 +56,20 @@ public class TaskPostgres extends Task {
         this.averageDevelopmentTime = task.getAverageDevelopmentTime();
     }
 
-
     /**
-     * Constructor for TaskPostgres with a description.
+     * Constructs a TaskPostgres instance with a specified description.
+     * Sets default values for other task properties.
      *
-     * @param description The description of the task.
+     * @param description the description of the task
      */
     public TaskPostgres(String description) {
         super(description);
     }
 
     /**
-     * Gets the unique ID of the task.
+     * Gets the ID of the task.
      *
-     * @return The ID of the task.
+     * @return the unique identifier of the task
      */
     @Override
     public String getId() {
@@ -77,15 +77,20 @@ public class TaskPostgres extends Task {
     }
 
     /**
-     * Sets the unique ID of the task.
+     * Sets the ID of the task.
      *
-     * @param id The ID to set for the task.
+     * @param id the unique identifier of the task
      */
     @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Gets the user ID associated with the task.
+     *
+     * @return the unique identifier of the user
+     */
     @Override
     public String getUserId(){
         return userId;

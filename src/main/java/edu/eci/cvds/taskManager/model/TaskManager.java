@@ -13,18 +13,20 @@ public class TaskManager {
     private HashMap<String, Task> tasks;
 
     /**
-     * Constructor initializes the TaskManager with an empty HashMap.
+     * Initializes a new TaskManager with an empty task list.
      */
     public TaskManager() {
         tasks = new HashMap<>();
     }
 
     /**
-     * Adds a new task to the TaskManager.
+     * Adds a new task to the manager.
+     * Validates task fields before adding.
      *
-     * @param task The Task object to be added.
-     * It is expected that the task has a unique ID assigned.
-     * @throws IllegalArgumentException if the ID is null.
+     * @param task the task to add
+     * @throws IllegalArgumentException if task or task ID is null,
+     *         difficulty level is invalid, priority is out of range,
+     *         or average development time is negative
      */
     public void addTask(Task task) {
         if (task == null || task.getId() == null) {
@@ -50,17 +52,17 @@ public class TaskManager {
     /**
      * Retrieves a task by its ID.
      *
-     * @param id The ID of the task to be retrieved.
-     * @return The Task object associated with the provided ID, or null if not found.
+     * @param id the unique identifier of the task
+     * @return the task with the specified ID, or null if not found
      */
     public Task getTask(String id) {
         return tasks.get(id);
     }
 
     /**
-     * Removes a task from the TaskManager by its ID.
+     * Deletes a task by its ID.
      *
-     * @param id The ID of the task to be deleted.
+     * @param id the unique identifier of the task to delete
      */
     public void deleteTask(String id) {
         tasks.remove(id);
@@ -69,8 +71,7 @@ public class TaskManager {
     /**
      * Marks a task as completed by its ID.
      *
-     * @param id The ID of the task to be marked as completed.
-     *           If the task is not found, no action is taken.
+     * @param id the unique identifier of the task to mark as completed
      */
     public void markAsCompleted(String id) {
         Task task = tasks.get(id);
@@ -80,9 +81,9 @@ public class TaskManager {
     }
 
     /**
-     * Gets tasks managed by the TaskManager.
+     * Retrieves all tasks.
      *
-     * @return A Map containing all tasks, where the key is the task ID and the value is the Task object.
+     * @return a map of all tasks, with task IDs as keys and Task objects as values
      */
     public Map<String, Task> getAllTasks() {
         return tasks;

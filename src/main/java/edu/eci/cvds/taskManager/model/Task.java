@@ -23,21 +23,19 @@ public class Task {
     public static final List<String> difficultyLevels =  new ArrayList<>(Arrays.asList("LOW", "MEDIUM", "HIGH"));
 
     /**
-     * Default constructor for Task.
+     * Default constructor that initializes a task with a unique ID.
      */
-
     public Task() {this.id = UUID.randomUUID().toString();}
 
-
     /**
-     * Constructor for Task.
+     * Constructs a task with specified attributes.
      *
-     * @param id The ID of task
-     * @param description The description of task.
-     * @param completed A boolean value of task.
-     * @param difficultyLevel The level of difficulty of the task (Low, Medium, High).
-     * @param priority The priority of the task, where 1 is the lowest priority and 5 is the highest.
-     * @param averageDevelopmentTime The average time required to complete the task, measured in hours.
+     * @param id                  unique identifier of the task
+     * @param description         brief description of the task
+     * @param completed           completion status of the task
+     * @param difficultyLevel     difficulty level of the task (LOW, MEDIUM, or HIGH)
+     * @param priority            priority level of the task (1 to 5)
+     * @param averageDevelopmentTime estimated development time in hours
      */
     public Task(String id, String description, boolean completed, String difficultyLevel, int priority, int averageDevelopmentTime) {
         this.id = id;
@@ -48,11 +46,10 @@ public class Task {
         this.averageDevelopmentTime = averageDevelopmentTime;
     }
 
-
     /**
-     * Constructor for Task with a description.
+     * Constructs a task with a description, setting default values for other attributes.
      *
-     * @param description The description of the task.
+     * @param description description of the task
      */
     public Task(String description) {
         this.description = description;
@@ -61,39 +58,38 @@ public class Task {
         this.priority = 1;
         this.averageDevelopmentTime = 0;
     }
-    
 
     /**
-     * Gets the unique ID of the task.
+     * Retrieves the task ID.
      *
-     * @return The ID of the task.
+     * @return a String representing the task ID
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Sets the unique ID of the task.
+     * Sets the task ID.
      *
-     * @param id The ID to set for the task.
+     * @param id unique identifier of the task
      */
     public void setId(String id) {
         this.id = id;
     }
 
     /**
-     * Gets the description of the task.
+     * Retrieves the task description.
      *
-     * @return The description of the task.
+     * @return a String representing the task description
      */
     public String getDescription() {
         return description;
     }
 
     /**
-     * Sets the description of the task.
+     * Sets the task description.
      *
-     * @param description The description to set for the task.
+     * @param description description of the task
      */
     public void setDescription(String description) {
         this.description = description;
@@ -102,25 +98,25 @@ public class Task {
     /**
      * Checks if the task is completed.
      *
-     * @return true if the task is completed, false otherwise.
+     * @return a boolean indicating task completion status
      */
     public boolean isCompleted() {
         return completed;
     }
 
     /**
-     * Sets the completion status of the task.
+     * Sets the task's completion status.
      *
-     * @param completed The completion status to set.
+     * @param completed true if the task is completed, false otherwise
      */
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
 
     /**
-     * Gets the difficulty level of the task.
+     * Retrieves the difficulty level of the task.
      *
-     * @return The difficulty level of the task.
+     * @return a String representing the task difficulty level
      */
     public String getDifficultyLevel() {
         return difficultyLevel;
@@ -129,8 +125,8 @@ public class Task {
     /**
      * Sets the difficulty level of the task.
      *
-     * @param difficultyLevel The difficulty level to set.
-     * @throws IllegalArgumentException if the difficulty level is not "LOW", "MEDIUM", or "HIGH".
+     * @param difficultyLevel difficulty level (LOW, MEDIUM, or HIGH)
+     * @throws IllegalArgumentException if the difficulty level is not valid
      */
     public void setDifficultyLevel(String difficultyLevel) {
         if (!difficultyLevels.contains(difficultyLevel)) {
@@ -140,19 +136,19 @@ public class Task {
     }
 
     /**
-     * Gets the priority of the task.
+     * Retrieves the task priority level.
      *
-     * @return The priority of the task, where 1 is the lowest priority and 5 is the highest.
+     * @return an integer representing the task priority level
      */
     public int getPriority() {
         return priority;
     }
 
     /**
-     * Sets the priority of the task.
+     * Sets the task priority level.
      *
-     * @param priority The priority to set, which must be between 1 and 5.
-     * @throws IllegalArgumentException if the priority is not between 1 and 5.
+     * @param priority priority level (1 to 5)
+     * @throws IllegalArgumentException if the priority is outside the range of 1 to 5
      */
     public void setPriority(int priority) {
         if (priority < 1 || priority > 5) {
@@ -162,9 +158,9 @@ public class Task {
     }
 
     /**
-     * Gets the average development time for the task.
+     * Retrieves the average development time for the task.
      *
-     * @return The average development time in hours.
+     * @return an integer representing the average development time in hours
      */
     public int getAverageDevelopmentTime() {
         return averageDevelopmentTime;
@@ -173,8 +169,8 @@ public class Task {
     /**
      * Sets the average development time for the task.
      *
-     * @param averageDevelopmentTime The average development time to set, which must be non-negative.
-     * @throws IllegalArgumentException if the average development time is negative.
+     * @param averageDevelopmentTime estimated time in hours
+     * @throws IllegalArgumentException if the time is negative
      */
     public void setAverageDevelopmentTime(int averageDevelopmentTime) {
         if (averageDevelopmentTime < 0) {
@@ -183,10 +179,20 @@ public class Task {
         this.averageDevelopmentTime = averageDevelopmentTime;
     }
 
+    /**
+     * Sets the user ID associated with the task.
+     *
+     * @param userId unique identifier of the user
+     */
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
+    /**
+     * Retrieves the user ID associated with the task.
+     *
+     * @return a String representing the user ID
+     */
     public String getUserId(){
         return userId;
     }

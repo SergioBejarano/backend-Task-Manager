@@ -27,24 +27,25 @@ public class  AuthController {
     private final TaskService taskService;
 
 
+    /**
+     * Constructor to initialize AuthController with required dependencies.
+     *
+     * @param authenticationManager the authentication manager for handling login authentication
+     * @param taskService the task service providing login and registration functionalities
+     */
     public AuthController(AuthenticationManager authenticationManager, TaskService taskService) {
         this.authenticationManager = authenticationManager;
         this.taskService = taskService;
     }
 
     /**
-     * Authenticates a user by checking the provided username and password.
+     * Handles user login.
      *
-     * This method searches for a user in the database by the given username.
-     * If the user is found, it verifies the provided password against the stored
-     * password using the password encoder. If the authentication is successful,
-     * it returns an Optional containing the User object; otherwise, it returns
-     * an empty Optional.
+     * <p>This method authenticates user credentials and returns a response with a success message,
+     * user details, and role information if login is successful.</p>
      *
-     * @param username the username of the user attempting to log in
-     * @param password the password provided by the user for authentication
-     * @return an Optional<User> containing the authenticated User if successful,
-     *         or an empty Optional if the username is not found or the password is incorrect
+     * @param authRequest the authentication request containing username and password
+     * @return a ResponseEntity containing the login result and user information or an error message if credentials are invalid
      */
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody AuthRequest authRequest) {
@@ -64,19 +65,13 @@ public class  AuthController {
     }
 
     /**
-     * Registers a new user in the system.
+     * Handles user registration.
      *
-     * This method creates a new User object with the provided username, password,
-     * and role ID. The password is encoded using BCrypt before being stored in the database.
-     * If the registration is successful, it saves the User object to the database and
-     * returns an Optional containing the newly created User. If any SQLException occurs,
-     * it catches the exception, prints the stack trace, and returns an empty Optional.
+     * <p>This method registers a new user with the provided credentials and role ID, returning a
+     * response with user details if registration is successful.</p>
      *
-     * @param username the username of the new user to be registered
-     * @param password the password for the new user; it will be encoded before storage
-     * @param roleId the role ID to be assigned to the new user
-     * @return an Optional<User> containing the newly registered User if successful,
-     *         or an empty Optional if registration fails due to an SQLException
+     * @param authRequest the authentication request containing username, password, and role ID
+     * @return a ResponseEntity containing the registration result and user information or an error message if registration fails
      */
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody AuthRequest authRequest) {
@@ -96,10 +91,13 @@ public class  AuthController {
     }
 
     /**
-     * Retrieve the role id for a given username.
+     * Retrieves the role ID for a given username.
      *
-     * @param username the username of the user
-     * @return ResponseEntity containing the role id or an error message
+     * <p>This method fetches the role ID associated with the specified username, returning a response
+     * with the role ID or an error message if the user is not found.</p>
+     *
+     * @param username the username whose role ID is being requested
+     * @return a ResponseEntity containing the role ID or an error message if the role is not found
      */
     @GetMapping("/{username}/role")
     public ResponseEntity<String> getRoleId(@PathVariable String username) {
