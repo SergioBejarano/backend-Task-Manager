@@ -22,11 +22,13 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-
     /**
-     * Retrieves all tasks.
+     * Retrieves all tasks for a specified user.
      *
-     * @return A list of all tasks.
+     * <p>This endpoint returns a list of tasks associated with the given username.</p>
+     *
+     * @param userName the username for whom tasks are being retrieved
+     * @return a list of TaskPostgres objects representing the user's tasks
      */
     @GetMapping("/{userName}")
     public List<TaskPostgres> getAllTasks(@PathVariable String userName) {
@@ -34,10 +36,13 @@ public class TaskController {
     }
 
     /**
-     * Creates a new task.
+     * Creates a new task for a specified user.
      *
-     * @param task The Task object to be created.
-     * @return The created Task object.
+     * <p>This endpoint creates and saves a task associated with the given username.</p>
+     *
+     * @param user the username for whom the task is being created
+     * @param task the task object to be created
+     * @return the created Task object
      */
     @PostMapping("/{user}")
     public Task createTask(@PathVariable String user, @RequestBody Task task)  {
@@ -45,10 +50,12 @@ public class TaskController {
     }
 
     /**
-     * Marks a task as completed.
+     * Marks a specific task as completed.
      *
-     * @param id The ID of the task to be marked as completed.
-     * @return ResponseEntity containing the updated Task object.
+     * <p>This endpoint updates the status of a task to completed based on its ID.</p>
+     *
+     * @param id the ID of the task to be marked as completed
+     * @return a ResponseEntity containing the updated Task object
      */
     @PutMapping("/{user}/{id}/complete")
     public ResponseEntity<Task> completeTask(@PathVariable String id) {
@@ -57,10 +64,12 @@ public class TaskController {
     }
 
     /**
-     * Deletes a task by its ID.
+     * Deletes a specific task by its ID.
      *
-     * @param id The ID of the task to be deleted.
-     * @return ResponseEntity indicating the outcome of the operation.
+     * <p>This endpoint removes the task associated with the provided ID from the database.</p>
+     *
+     * @param id the ID of the task to be deleted
+     * @return a ResponseEntity with no content, indicating successful deletion
      */
     @DeleteMapping("/{user}/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable String id)  {
@@ -69,7 +78,12 @@ public class TaskController {
     }
 
     /**
-     * Deletes all tasks.
+     * Deletes all tasks for a specified user.
+     *
+     * <p>This endpoint removes all tasks associated with the given username.</p>
+     *
+     * @param user the username for whom all tasks are being deleted
+     * @return a ResponseEntity with no content, indicating successful deletion
      */
     @DeleteMapping("/{user}")
     public ResponseEntity<Void> deleteAllTasks(@PathVariable String user)  {
@@ -78,9 +92,12 @@ public class TaskController {
     }
 
     /**
-     * Generate a list of random tasks.
+     * Generates random tasks for a specified user.
      *
-     * @return a list of randomly generated tasks.
+     * <p>This endpoint creates a set of random tasks associated with the given username.</p>
+     *
+     * @param user the username for whom random tasks are being generated
+     * @return a list of randomly generated Task objects
      */
     @PostMapping("/{user}/task/randomTasks")
     public List<Task> generateRandomTasks(@PathVariable String user) {
@@ -88,9 +105,13 @@ public class TaskController {
     }
 
     /**
-     * Fetches tasks for the frontend from PostgreSQL.
+     * Fetches tasks for a specified user with additional exception handling.
      *
-     * @return A ResponseEntity containing a list of tasks in JSON format.
+     * <p>This endpoint retrieves tasks associated with the given username, handling potential SQL exceptions.</p>
+     *
+     * @param userName the username for whom tasks are being fetched
+     * @return a ResponseEntity containing a list of TaskPostgres objects or an error message if an exception occurs
+     * @throws SQLException if a database access error occurs
      */
     @GetMapping("/{userName}/fetchTasks")
     public ResponseEntity<List<TaskPostgres>> fetchTasks(@PathVariable String userName) throws SQLException {

@@ -25,9 +25,9 @@ public class TaskMongo extends Task {
     }
 
     /**
-     * Constructor that creates a TaskMongo from a Task object.
+     * Constructs a TaskMongo instance based on a Task object.
      *
-     * @param task A task object to copy data from.
+     * @param task the Task object to copy properties from
      */
     public TaskMongo(Task task) {
         super(task.getId(), task.getDescription(), task.isCompleted(), task.getDifficultyLevel(), task.getPriority(), task.getAverageDevelopmentTime());
@@ -36,24 +36,30 @@ public class TaskMongo extends Task {
     }
 
     /**
-     * Constructor for TaskMongo with a description.
+     * Constructs a TaskMongo instance with a specified description.
+     * Sets default values for other task properties.
      *
-     * @param description The description of the task.
+     * @param description the description of the task
      */
     public TaskMongo(String description) {
         super(description);
     }
 
     /**
-     * Gets the unique ID of the task.
+     * Gets the ID of the task.
      *
-     * @return The ID of the task.
+     * @return the unique identifier of the task
      */
     @Override
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets the user ID associated with the task.
+     *
+     * @param userId the unique identifier of the user
+     */
     public void setUserId(String userId) {
         this.userId = userId;
     }

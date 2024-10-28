@@ -22,9 +22,10 @@ public class DatabaseConnectionPostgres {
     /**
      * Establishes a connection to the PostgreSQL database.
      *
-     * @return Connection object representing the database connection
-     * @throws SQLException if a database access error occurs or the url is
-     *                      null
+     * <p>This method uses JDBC to connect to a PostgreSQL database with SSL mode required.</p>
+     *
+     * @return a Connection object representing the established database connection
+     * @throws SQLException if a database access error occurs
      */
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);

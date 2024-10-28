@@ -45,6 +45,14 @@ public class CorsConfig implements WebMvcConfigurer {
                 .maxAge(3600);
     }
 
+    /**
+     * Provides a CORS configuration source.
+     *
+     * <p>This bean defines allowed origins, HTTP methods, headers, and sets
+     * credentials support and max age for CORS preflight requests.</p>
+     *
+     * @return a configured UrlBasedCorsConfigurationSource instance
+     */
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -59,6 +67,14 @@ public class CorsConfig implements WebMvcConfigurer {
         return source;
     }
 
+    /**
+     * Registers a CORS filter.
+     *
+     * <p>This bean provides a CorsFilter that applies the configured CORS
+     * settings across the application.</p>
+     *
+     * @return a new instance of CorsFilter with specified configuration
+     */
     @Bean
     public CorsFilter corsFilter() {
         return new CorsFilter(corsConfigurationSource());

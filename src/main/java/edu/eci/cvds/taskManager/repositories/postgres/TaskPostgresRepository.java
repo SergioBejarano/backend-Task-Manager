@@ -22,13 +22,11 @@ import java.util.Optional;
 @Repository
 public class TaskPostgresRepository {
 
-
     /**
-     * Saves a task to the database. If a task with the same ID already exists, it will
-     * update the existing task's description, completion status, difficulty level, priority,
-     * and average development time.
+     * Saves a task to the PostgreSQL database. If a task with the same ID exists,
+     * it updates the existing record.
      *
-     * @param task the {@link TaskPostgres} object to be saved
+     * @param task the task to be saved
      * @throws SQLException if a database access error occurs
      */
     public void save(TaskPostgres task) throws SQLException {
@@ -50,12 +48,11 @@ public class TaskPostgresRepository {
         }
     }
 
-
     /**
-     * Retrieves all tasks for a specific user from the database.
+     * Retrieves all tasks associated with a specified username.
      *
      * @param nameUser the username of the user whose tasks are to be retrieved
-     * @return a list of {@link TaskPostgres} objects for the specified user
+     * @return a list of TaskPostgres objects associated with the given username
      * @throws SQLException if a database access error occurs
      */
     public List<TaskPostgres> findAllByUser(String nameUser) throws SQLException {
@@ -87,9 +84,8 @@ public class TaskPostgresRepository {
         return tasks;
     }
 
-
     /**
-     * Deletes a task from the database by its ID.
+     * Deletes a task by its ID from the PostgreSQL database.
      *
      * @param id the ID of the task to be deleted
      * @throws SQLException if a database access error occurs
@@ -103,11 +99,10 @@ public class TaskPostgresRepository {
         }
     }
 
-
     /**
-     * Deletes all tasks associated with a specific user from the database.
+     * Deletes all tasks associated with a specified user ID.
      *
-     * @param userId The ID of the user whose tasks are to be deleted.
+     * @param userId the ID of the user whose tasks should be deleted
      * @throws SQLException if a database access error occurs
      */
     public void deleteAllByUserId(String userId) throws SQLException {
@@ -119,9 +114,8 @@ public class TaskPostgresRepository {
         }
     }
 
-
     /**
-     * Marks a task as completed in the database.
+     * Marks a task as completed by its ID.
      *
      * @param id the ID of the task to be marked as completed
      * @throws SQLException if a database access error occurs
@@ -136,11 +130,10 @@ public class TaskPostgresRepository {
     }
 
     /**
-     * Retrieves the user ID based on the username.
+     * Finds the user ID associated with a given username.
      *
-     * @param username the username of the user
-     * @return the user ID if found, otherwise null
-     * @throws SQLException if a database access error occurs
+     * @param username the username to search for
+     * @return an Optional containing the user ID, if found; otherwise, an empty Optional
      */
     public Optional<String> findUserIdByUsername(String username) {
         String userId = null;
@@ -163,9 +156,9 @@ public class TaskPostgresRepository {
     }
 
     /**
-     * Saves a user to the database.
+     * Saves a user to the PostgreSQL database.
      *
-     * @param user the {@link User} object to be saved
+     * @param user the user to be saved
      * @throws SQLException if a database access error occurs
      */
     public void saveUser(User user) throws SQLException {
@@ -182,10 +175,10 @@ public class TaskPostgresRepository {
     }
 
     /**
-     * Retrieves the role_id based on the username.
+     * Finds the role ID associated with a given username.
      *
-     * @param username the username of the user
-     * @throws SQLException if a database access error occurs
+     * @param username the username to search for
+     * @return an Optional containing the role ID, if found; otherwise, an empty Optional
      */
     public Optional<String> findRoleId(String username) {
         String roleId = null;
@@ -207,12 +200,11 @@ public class TaskPostgresRepository {
         return Optional.of(roleId);
     }
 
-
     /**
-     * Busca un usuario en la base de datos usando el nombre de usuario.
+     * Finds a user by their username.
      *
-     * @param username el nombre de usuario a buscar.
-     * @return un Optional con el usuario si se encuentra, de lo contrario, un Optional vacío.
+     * @param username the username to search for
+     * @return an Optional containing the User object if found; otherwise, an empty Optional
      */
     public Optional<User> findByUsername(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";

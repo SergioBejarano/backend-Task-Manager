@@ -14,17 +14,17 @@ import java.util.List;
 public interface TaskMongoRepository extends MongoRepository<TaskMongo, String> {
 
     /**
-     * Finds all tasks associated with the given user ID.
+     * Retrieves a list of TaskMongo entities associated with a specified user ID.
      *
-     * @param userId the ID of the user for whom to find tasks
-     * @return a list of tasks associated with the specified user ID
+     * @param userId the ID of the user whose tasks are to be retrieved
+     * @return a list of TaskMongo entities linked to the provided user ID
      */
     List<TaskMongo> findByUserId(String userId);
 
     /**
-     * Deletes all tasks associated with a specific user ID from the MongoDB database.
+     * Deletes all TaskMongo entities associated with a specified user ID.
      *
-     * @param userId The ID of the user whose tasks are to be deleted.
+     * @param userId the ID of the user whose tasks should be deleted
      */
     void deleteAllByUserId(String userId);
 }
