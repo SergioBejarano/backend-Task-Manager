@@ -152,7 +152,7 @@ public class TaskService {
      */
     public List<Task> generateRandomTasks(String userName) {
         Random random = new Random();
-        int numTasks = random.nextInt(901) + 100; // Genera entre 100 y 1000 tasks
+        int numTasks = random.nextInt(21) + 10; // Genera entre 10 y 30 tasks
         List<Task> tasks = new ArrayList<>();
 
         for (int i = 1; i <= numTasks; i++) {
