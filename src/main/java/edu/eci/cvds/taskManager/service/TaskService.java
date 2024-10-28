@@ -163,7 +163,7 @@ public class TaskService {
             task.setCompleted(random.nextBoolean());
             task.setPriority(random.nextInt(5) + 1);
             task.setDifficultyLevel(difficultyLevels.get(random.nextInt(difficultyLevels.size())));
-            task.setAverageDevelopmentTime(Math.abs(random.nextInt()));
+            task.setAverageDevelopmentTime(random.nextInt(10) + 1);
 
             this.save(userName, task);
             tasks.add(task);
