@@ -40,8 +40,8 @@ public class User {
 
 
     public String getPassword() {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.encode(password);
+
+        return password;
     }
 
     public void setPassword(String password) {

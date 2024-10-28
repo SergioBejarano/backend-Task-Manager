@@ -43,6 +43,7 @@ public class TaskService {
         this.userRepository = NewUserRepository;
 
     }
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
     /**
@@ -65,19 +66,11 @@ public class TaskService {
      *
      * @return The authenticated user's ID.
      */
-    private String getAuthenticatedUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    private String getAuthenticatedUser(String username) {
 
-        if (principal instanceof UserDetails) {
-            String username = ((UserDetails) principal).getUsername();
-            return taskPostgresRepository.findUserIdByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        } else if (principal instanceof String username) {
-            return taskPostgresRepository.findUserIdByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        } else {
-            throw new UsernameNotFoundException("User not authenticated");
-        }
+        return taskPostgresRepository.findUserIdByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
     }
 
 
@@ -88,9 +81,9 @@ public class TaskService {
      * @param task The Task object to be saved.
      * @return The saved Task object.
      */
-    public Task save(Task task, String username)  {
-        task.setUserId(taskPostgresRepository.findUserIdByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username)));
+    public Task save(String userName, Task task)  {
+        task.setUserId(getAuthenticatedUser(userName));
+
         TaskMongo taskMongo = new TaskMongo(task);
         TaskPostgres taskPostgres = new TaskPostgres(task);
         try {
@@ -118,8 +111,8 @@ public class TaskService {
     /**
      * Deletes all tasks associated with the authenticated user from both MongoDB and Postgres repositories.
      */
-    public void deleteAllByUserId()  {
-        String userID = getAuthenticatedUser();
+    public void deleteAllByUserId(String userName)  {
+        String userID = getAuthenticatedUser(userName);
         try {
             taskPostgresRepository.deleteAllByUserId(userID);
         } catch (SQLException e) {
@@ -157,7 +150,7 @@ public class TaskService {
      *
      * @return a list of randomly generated tasks.
      */
-    public List<Task> generateRandomTasks(String username) {
+    public List<Task> generateRandomTasks() {
         Random random = new Random();
         int numTasks = random.nextInt(901) + 100; // Genera entre 100 y 1000 tasks
         List<Task> tasks = new ArrayList<>();
@@ -172,39 +165,29 @@ public class TaskService {
             task.setDifficultyLevel(difficultyLevels.get(random.nextInt(difficultyLevels.size())));
             task.setAverageDevelopmentTime(Math.abs(random.nextInt()));
 
-            this.save(task, username);
+            this.save("sergioBejarano",task);
             tasks.add(task);
         }
         return tasks;
     }
 
-    /**
-     * Attempts to authenticate a user by their username and password.
-     * If the username exists and the password matches the stored encoded password,
-     * the authenticated user is returned. Otherwise, an empty Optional is returned.
-     *
-     * @param username the username of the user trying to log in
-     * @param password the password provided for authentication
-     * @return an Optional containing the authenticated user if successful, otherwise empty
-     */
-    public static Optional<User> loginUser(String username, String password) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-
-        if (!optionalUser.isPresent()) {
-            return Optional.empty();
-        }
-
-        User user = optionalUser.get();
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            return Optional.of(user);
+    public Optional<User> loginUser(String username, String password) {
+        Optional<User> userOptional = taskPostgresRepository.findByUsername(username);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                return Optional.of(user);
+            } else {
+                System.out.println("Contraseña incorrecta");
+            }
         } else {
-            return Optional.empty();
+            System.out.println("Usuario no encontrado");
         }
+        return Optional.empty();
     }
 
-    public static Optional<User> registerUser(String username, String password) {
+
+    public Optional<User> registerUser(String username, String password) {
         try {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(password);
@@ -213,11 +196,12 @@ public class TaskService {
             user.setUsername(username);
             user.setPassword(encodedPassword);
 
-            User savedUser = userRepository.save(user); // Guardar el usuario en la base de datos
-            return Optional.of(savedUser);
-        } catch (Exception e) {
+            taskPostgresRepository.saveUser(user);
+            return Optional.of(user);
+        } catch (SQLException e) {
             e.printStackTrace();
             return Optional.empty();
         }
     }
+
 }

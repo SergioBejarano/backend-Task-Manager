@@ -39,9 +39,9 @@ public class TaskController {
      * @param task The Task object to be created.
      * @return The created Task object.
      */
-    @PostMapping("/{userName}")
-    public Task createTask(@RequestBody Task task, @PathVariable String userName)  {
-        return taskService.save(task, userName);
+    @PostMapping("/{user}")
+    public Task createTask(@PathVariable String user, @RequestBody Task task)  {
+        return taskService.save(user, task);
     }
 
     /**
@@ -50,7 +50,7 @@ public class TaskController {
      * @param id The ID of the task to be marked as completed.
      * @return ResponseEntity containing the updated Task object.
      */
-    @PutMapping("/{id}/complete")
+    @PutMapping("/{user}/{id}/complete")
     public ResponseEntity<Task> completeTask(@PathVariable String id) {
         Task updatedTask = taskService.markAsCompleted(id);
         return ResponseEntity.ok(updatedTask);
@@ -62,7 +62,7 @@ public class TaskController {
      * @param id The ID of the task to be deleted.
      * @return ResponseEntity indicating the outcome of the operation.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{user}/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable String id)  {
         taskService.deleteById(id);
         return ResponseEntity.noContent().build();
@@ -71,9 +71,9 @@ public class TaskController {
     /**
      * Deletes all tasks.
      */
-    @DeleteMapping()
-    public ResponseEntity<Void> deleteAllTasks()  {
-        taskService.deleteAllByUserId();
+    @DeleteMapping("/{user}")
+    public ResponseEntity<Void> deleteAllTasks(@PathVariable String user)  {
+        taskService.deleteAllByUserId(user);
         return ResponseEntity.noContent().build();
     }
 
@@ -86,9 +86,9 @@ public class TaskController {
      *
      * @return a list of randomly generated tasks.
      */
-    @PostMapping("/{userName}/task/randomTasks")
-    public List<Task> generateRandomTasks(@PathVariable String userName) {
-        return taskService.generateRandomTasks(userName);
+    @PostMapping("/{user}/task/randomTasks")
+    public List<Task> generateRandomTasks() {
+        return taskService.generateRandomTasks();
     }
 
     /**
