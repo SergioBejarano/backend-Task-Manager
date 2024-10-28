@@ -78,17 +78,13 @@ public class TaskController {
     }
 
     /**
-     * Deletes tasks
-     */
-
-    /**
      * Generate a list of random tasks.
      *
      * @return a list of randomly generated tasks.
      */
     @PostMapping("/{user}/task/randomTasks")
-    public List<Task> generateRandomTasks() {
-        return taskService.generateRandomTasks();
+    public List<Task> generateRandomTasks(@PathVariable String user) {
+        return taskService.generateRandomTasks(user);
     }
 
     /**

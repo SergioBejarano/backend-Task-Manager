@@ -150,7 +150,7 @@ public class TaskService {
      *
      * @return a list of randomly generated tasks.
      */
-    public List<Task> generateRandomTasks() {
+    public List<Task> generateRandomTasks(String userName) {
         Random random = new Random();
         int numTasks = random.nextInt(901) + 100; // Genera entre 100 y 1000 tasks
         List<Task> tasks = new ArrayList<>();
@@ -165,7 +165,7 @@ public class TaskService {
             task.setDifficultyLevel(difficultyLevels.get(random.nextInt(difficultyLevels.size())));
             task.setAverageDevelopmentTime(Math.abs(random.nextInt()));
 
-            this.save("sergioBejarano",task);
+            this.save(userName, task);
             tasks.add(task);
         }
         return tasks;
