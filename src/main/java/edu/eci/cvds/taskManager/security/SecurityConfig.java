@@ -56,7 +56,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /**
+
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> servletContainer() {
         return factory -> factory.addAdditionalTomcatConnectors(httpConnector());
@@ -70,6 +70,6 @@ public class SecurityConfig {
         connector.setRedirectPort(8443);
         return connector;
     }
-    **/
+
 
 }
