@@ -171,6 +171,20 @@ public class TaskService {
         return tasks;
     }
 
+    /**
+     * Authenticates a user by validating the provided username and password.
+     *
+     * This method retrieves a user from the database using the given username.
+     * If the user is found, it compares the provided password with the stored
+     * password using a password encoder. If the passwords match, it returns
+     * an Optional containing the User object. If the user is not found or the
+     * passwords do not match, it returns an empty Optional.
+     *
+     * @param username the username of the user trying to log in
+     * @param password the password provided by the user for authentication
+     * @return an Optional<User> containing the authenticated User if the login is successful,
+     *         or an empty Optional if the user is not found or the password is incorrect
+     */
     public Optional<User> loginUser(String username, String password) {
         Optional<User> userOptional = taskPostgresRepository.findByUsername(username);
         if (userOptional.isPresent()) {
@@ -186,8 +200,22 @@ public class TaskService {
         return Optional.empty();
     }
 
-
-    public Optional<User> registerUser(String username, String password) {
+    /**
+     * Registers a new user in the system with the specified username, password, and role ID.
+     *
+     * This method creates a new User object, encodes the provided password using
+     * BCrypt, and assigns the role ID to the new user. It saves the user to the
+     * database and returns an Optional containing the newly created User. If any
+     * SQLException occurs during the process, it prints the stack trace and returns
+     * an empty Optional to indicate failure.
+     *
+     * @param username the username for the new user
+     * @param password the password for the new user; this will be encoded before saving
+     * @param roleId the ID of the role assigned to the new user
+     * @return an Optional<User> containing the newly registered User if successful,
+     *         or an empty Optional if registration fails due to an SQLException
+     */
+    public Optional<User> registerUser(String username, String password, String roleId) {
         try {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(password);
@@ -195,6 +223,7 @@ public class TaskService {
             User user = new User();
             user.setUsername(username);
             user.setPassword(encodedPassword);
+            user.setRoleId(roleId);
 
             taskPostgresRepository.saveUser(user);
             return Optional.of(user);
@@ -202,6 +231,16 @@ public class TaskService {
             e.printStackTrace();
             return Optional.empty();
         }
+    }
+
+    /**
+     * Retrieves the role_id for a given username.
+     *
+     * @param username the username of the user
+     * @return an Optional containing the role_id if found, empty otherwise
+     */
+    public Optional<String> findRoleId(String username) {
+        return taskPostgresRepository.findRoleId(username);
     }
 
 }
