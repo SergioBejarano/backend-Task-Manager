@@ -62,6 +62,15 @@ class TaskManagerApplicationTests {
 
 	@Test
 	void shouldAddTask() {
+		Task task = new Task("id", "description", false, "ALTO", 1, 1);
+		task.setId("1");
+		assertThrows(IllegalArgumentException.class, () -> taskManager.addTask(task),
+                "Adding task with null ID should throw IllegalArgumentException");
+		
+	}
+
+	@Test
+	void shouldNotAddTask() {
 		Task task = new Task("Test task");
 		task.setId("1");
 		taskManager.addTask(task);
@@ -144,6 +153,14 @@ class TaskManagerApplicationTests {
 		task1.setDifficultyLevel("MEDIUM");
 		taskManager.addTask(task1);
 		assertEquals("MEDIUM", taskManager.getTask("7").getDifficultyLevel());
+	}
+
+	@Test
+	void shouldNotSetDifficultyLevel() {
+		Task task1 = new Task("Task 1");
+		task1.setId("7");
+		assertThrows(IllegalArgumentException.class, () -> task1.setDifficultyLevel("ALTO"),
+                "Adding task with null ID should throw IllegalArgumentException");
 	}
 
 	@Test
