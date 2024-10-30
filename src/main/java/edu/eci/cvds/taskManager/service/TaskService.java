@@ -5,11 +5,10 @@ import edu.eci.cvds.taskManager.model.TaskMongo;
 import edu.eci.cvds.taskManager.model.User;
 import edu.eci.cvds.taskManager.model.TaskPostgres;
 import edu.eci.cvds.taskManager.repositories.mongo.TaskMongoRepository;
-import edu.eci.cvds.taskManager.repositories.UserRepository;
+import edu.eci.cvds.taskManager.repositories.mongo.UserRepository;
 import edu.eci.cvds.taskManager.repositories.postgres.TaskPostgresRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * The {@code TaskService} class provides business logic for managing tasks within the application.
@@ -204,13 +202,14 @@ public class TaskService {
         try {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(password);
-
             User user = new User();
             user.setUsername(username);
             user.setPassword(encodedPassword);
             user.setRoleId(roleId);
-
             taskPostgresRepository.saveUser(user);
+            String generatedId = taskPostgresRepository.getUserIdByUsername(username);
+            user.setId(String.valueOf(generatedId));
+            userRepository.save(user);
             return Optional.of(user);
         } catch (SQLException e) {
             e.printStackTrace();

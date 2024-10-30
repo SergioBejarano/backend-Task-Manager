@@ -1,7 +1,7 @@
 package edu.eci.cvds.taskManager.security;
 
 import edu.eci.cvds.taskManager.model.User;
-import edu.eci.cvds.taskManager.repositories.UserRepository;
+import edu.eci.cvds.taskManager.repositories.mongo.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

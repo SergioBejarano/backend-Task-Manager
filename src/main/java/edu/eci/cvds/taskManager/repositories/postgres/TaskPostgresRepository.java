@@ -229,4 +229,34 @@ public class TaskPostgresRepository {
 
         return Optional.empty();
     }
+
+
+    /**
+     * Retrieves the user ID as a string based on the provided username.
+     *
+     * This method connects to the PostgreSQL database and executes an SQL query
+     * to find the `id` of the user corresponding to the provided `username`.
+     * If the user is found, it returns the `id` as a `String`. If the user
+     * is not found, it throws a `SQLException`.
+     *
+     * @param username The username for which to retrieve the user ID.
+     * @return The user ID as a `String`.
+     * @throws SQLException If there is an error connecting to the database or executing the SQL query,
+     *                      or if the username is not found in the database.
+     */
+    public String getUserIdByUsername(String username) throws SQLException {
+        String sql = "SELECT id FROM users WHERE username = ?";
+
+        try (Connection conn = DatabaseConnectionPostgres.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return String.valueOf(rs.getInt("id"));
+            } else {
+                throw new SQLException("Username not found");
+            }
+        }
+    }
 }
