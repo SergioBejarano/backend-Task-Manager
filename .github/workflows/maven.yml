@@ -1,9 +1,9 @@
 name: Deploy Java App to Azure Web App
 
 on:
-  pull_request:
+  push:
     branches:
-      - master  
+      - temporal
 
 env:
   AZURE_WEBAPP_NAME: 'taskManager'  
