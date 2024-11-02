@@ -98,18 +98,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated())
-                .httpBasic(withDefaults());
+                .formLogin(form -> form
+                        .loginPage("/auth/login") // URL de la página de inicio de sesión personalizada
+                        .permitAll() // Permitir que todos accedan a la página de inicio de sesión
+                        .defaultSuccessUrl("/api/tasks", true) // URL a la que redirigir después de un inicio de sesión exitoso
+                        .failureUrl("/auth") // URL a la que redirigir en caso de error de inicio de sesión
+                );
         return http.build();
-    }
-
-    /**
-     * Configures the servlet container for the application by adding additional Tomcat connectors.
-     *
-     * @return a WebServerFactoryCustomizer for TomcatServletWebServerFactory
-     */
-    @Bean
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> servletContainer() {
-        return factory -> factory.addAdditionalTomcatConnectors(httpConnector());
     }
 
     @Bean
@@ -125,19 +120,6 @@ public class SecurityConfig {
         return source;
     }
 
-    /**
-     * Creates and configures a new HTTP connector for the Tomcat server.
-     *
-     * @return a Connector instance configured for HTTP
-     */
-    private Connector httpConnector() {
-        Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
-        connector.setScheme("http");
-        connector.setPort(8081);
-        connector.setSecure(false);
-        connector.setRedirectPort(8443);
-        return connector;
-    }
 }
 
 
