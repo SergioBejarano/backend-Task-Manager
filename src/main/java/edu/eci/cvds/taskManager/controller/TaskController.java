@@ -30,6 +30,7 @@ public class TaskController {
      * @param userName the username for whom tasks are being retrieved
      * @return a list of TaskPostgres objects representing the user's tasks
      */
+    @CrossOrigin(origins = "*")
     @GetMapping("/{userName}")
     public List<TaskPostgres> getAllTasks(@PathVariable String userName) {
         return taskService.findAll(userName);
@@ -44,6 +45,7 @@ public class TaskController {
      * @param task the task object to be created
      * @return the created Task object
      */
+    @CrossOrigin(origins = "*")
     @PostMapping("/{user}")
     public Task createTask(@PathVariable String user, @RequestBody Task task)  {
         return taskService.save(user, task);
@@ -57,6 +59,7 @@ public class TaskController {
      * @param id the ID of the task to be marked as completed
      * @return a ResponseEntity containing the updated Task object
      */
+    @CrossOrigin(origins = "*")
     @PutMapping("/{user}/{id}/complete")
     public ResponseEntity<Task> completeTask(@PathVariable String id) {
         Task updatedTask = taskService.markAsCompleted(id);
@@ -71,6 +74,7 @@ public class TaskController {
      * @param id the ID of the task to be deleted
      * @return a ResponseEntity with no content, indicating successful deletion
      */
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/{user}/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable String id)  {
         taskService.deleteById(id);
@@ -85,6 +89,7 @@ public class TaskController {
      * @param user the username for whom all tasks are being deleted
      * @return a ResponseEntity with no content, indicating successful deletion
      */
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/{user}")
     public ResponseEntity<Void> deleteAllTasks(@PathVariable String user)  {
         taskService.deleteAllByUserId(user);
@@ -99,7 +104,8 @@ public class TaskController {
      * @param user the username for whom random tasks are being generated
      * @return a list of randomly generated Task objects
      */
-    @PostMapping("/{user}/task/randomTasks")
+    @CrossOrigin(origins = "*")
+    @PostMapping("/{user}/random-tasks")
     public List<Task> generateRandomTasks(@PathVariable String user) {
         return taskService.generateRandomTasks(user);
     }
@@ -113,6 +119,7 @@ public class TaskController {
      * @return a ResponseEntity containing a list of TaskPostgres objects or an error message if an exception occurs
      * @throws SQLException if a database access error occurs
      */
+    @CrossOrigin(origins = "*")
     @GetMapping("/{userName}/fetchTasks")
     public ResponseEntity<List<TaskPostgres>> fetchTasks(@PathVariable String userName) throws SQLException {
         List<TaskPostgres> tasks = taskService.findAll(userName);

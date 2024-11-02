@@ -9,18 +9,27 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.List;
 
 /**
  * The {@code SecurityConfig} class is a configuration class for Spring Security.
  * It sets up the security configuration for the application, including user authentication
  * and authorization settings.
  */
+@EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
@@ -85,35 +94,33 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated())
-                .httpBasic(withDefaults());
+                .formLogin(form -> form
+                        .loginPage("/auth/login") // URL de la página de inicio de sesión personalizada
+                        .permitAll() // Permitir que todos accedan a la página de inicio de sesión
+                        .defaultSuccessUrl("/api/tasks", true) // URL a la que redirigir después de un inicio de sesión exitoso
+                        .failureUrl("/auth") // URL a la que redirigir en caso de error de inicio de sesión
+                );
         return http.build();
     }
 
-    /**
-     * Configures the servlet container for the application by adding additional Tomcat connectors.
-     *
-     * @return a WebServerFactoryCustomizer for TomcatServletWebServerFactory
-     */
     @Bean
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> servletContainer() {
-        return factory -> factory.addAdditionalTomcatConnectors(httpConnector());
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true); // Habilita las credenciales si es necesario
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
-    /**
-     * Creates and configures a new HTTP connector for the Tomcat server.
-     *
-     * @return a Connector instance configured for HTTP
-     */
-    private Connector httpConnector() {
-        Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
-        connector.setScheme("http");
-        connector.setPort(8081);
-        connector.setSecure(false);
-        connector.setRedirectPort(8443);
-        return connector;
-    }
 }
+
+
