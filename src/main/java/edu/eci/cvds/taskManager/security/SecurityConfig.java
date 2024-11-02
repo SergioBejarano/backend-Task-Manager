@@ -93,12 +93,11 @@ public class SecurityConfig {
     }
 
 
-    /*/**
+    /**
      * Configures the servlet container for the application by adding additional Tomcat connectors.
      *
      * @return a WebServerFactoryCustomizer for TomcatServletWebServerFactory
      */
-    /*
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> servletContainer() {
         return factory -> factory.addAdditionalTomcatConnectors(httpConnector());
@@ -109,16 +108,12 @@ public class SecurityConfig {
      *
      * @return a Connector instance configured for HTTP
      */
-    /*private Connector httpConnector() {
+    private Connector httpConnector() {
         Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
         connector.setScheme("http");
         connector.setPort(8081);
         connector.setSecure(false);
         connector.setRedirectPort(8443);
         return connector;
-
     }
-
-
-     */
 }
