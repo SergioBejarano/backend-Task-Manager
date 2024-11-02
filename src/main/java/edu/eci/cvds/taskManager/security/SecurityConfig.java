@@ -59,6 +59,7 @@ public class SecurityConfig {
         return authProvider;
     }
 
+
     /**
      * Provides an AuthenticationManager bean using the provided AuthenticationConfiguration.
      *
