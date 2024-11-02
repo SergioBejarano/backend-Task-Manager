@@ -114,5 +114,6 @@ public class SecurityConfig {
         connector.setSecure(false);
         connector.setRedirectPort(8443);
         return connector;
+
     }
 }
