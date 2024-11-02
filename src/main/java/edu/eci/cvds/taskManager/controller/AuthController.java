@@ -7,12 +7,7 @@ import edu.eci.cvds.taskManager.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -47,6 +42,7 @@ public class  AuthController {
      * @param authRequest the authentication request containing username and password
      * @return a ResponseEntity containing the login result and user information or an error message if credentials are invalid
      */
+    @CrossOrigin(origins = "*")
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody AuthRequest authRequest) {
         Map<String, Object> response = new HashMap<>();
@@ -73,6 +69,7 @@ public class  AuthController {
      * @param authRequest the authentication request containing username, password, and role ID
      * @return a ResponseEntity containing the registration result and user information or an error message if registration fails
      */
+    @CrossOrigin(origins = "*")
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody AuthRequest authRequest) {
         Map<String, Object> response = new HashMap<>();
@@ -99,6 +96,7 @@ public class  AuthController {
      * @param username the username whose role ID is being requested
      * @return a ResponseEntity containing the role ID or an error message if the role is not found
      */
+    @CrossOrigin(origins = "*")
     @GetMapping("/{username}/role")
     public ResponseEntity<String> getRoleId(@PathVariable String username) {
         return taskService.findRoleId(username)
