@@ -42,7 +42,6 @@ public class  AuthController {
      * @param authRequest the authentication request containing username and password
      * @return a ResponseEntity containing the login result and user information or an error message if credentials are invalid
      */
-    @CrossOrigin(origins = "*")
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody AuthRequest authRequest) {
         Map<String, Object> response = new HashMap<>();
@@ -69,7 +68,6 @@ public class  AuthController {
      * @param authRequest the authentication request containing username, password, and role ID
      * @return a ResponseEntity containing the registration result and user information or an error message if registration fails
      */
-    @CrossOrigin(origins = "*")
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody AuthRequest authRequest) {
         Map<String, Object> response = new HashMap<>();
@@ -96,7 +94,6 @@ public class  AuthController {
      * @param username the username whose role ID is being requested
      * @return a ResponseEntity containing the role ID or an error message if the role is not found
      */
-    @CrossOrigin(origins = "*")
     @GetMapping("/{username}/role")
     public ResponseEntity<String> getRoleId(@PathVariable String username) {
         return taskService.findRoleId(username)
